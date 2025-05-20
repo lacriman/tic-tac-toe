@@ -5,7 +5,13 @@ Tic Tac Toe
 - show the board to the user
 - check if the game is over
 - ask user for the move
-- take input
+- take user's input:
+
+    - check if the input is a num
+    - 
+
+
+
 - input parsing (is it two integers?)
 - game rule validation (is the move within bounds? Is the cell empty?)
 - check if there a place for a move
