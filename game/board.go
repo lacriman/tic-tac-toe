@@ -13,7 +13,7 @@ func defaultBoard() [3][3]string {
 	return board
 }
 
-func printBoard() {
+func PrintBoard() {
 	board := defaultBoard()
 
 	for i := 0; i < 3; i++ {
