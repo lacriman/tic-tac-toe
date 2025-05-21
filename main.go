@@ -13,11 +13,13 @@ func main() {
 }
 
 func startGame() {
+	board := game.ClearBoard()
+
 	continueGame := true
 	for continueGame {
 		move := ui.MakeMove()
 		fmt.Println()
-		game.PrintBoard()
+		game.PrintBoard(board)
 		fmt.Printf("Your move is %v", move)
 		break
 	}
