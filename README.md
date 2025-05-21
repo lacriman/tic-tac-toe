@@ -23,6 +23,7 @@ go run main.go
 
 ## 🏗️ Project Structure
 
+```text
 tic-tac-toe/
 ├── main.go            # Entry point & game loop
 ├── go.mod             # Go module definition
@@ -32,7 +33,7 @@ tic-tac-toe/
 │   └── validate.go    # Move validation
 └── ui/                # User interface
     └── input.go       # Input handling & prompts
-
+```
 
 
 ## 🎮 How to Play
@@ -68,4 +69,4 @@ Enter column (1-3): 2
 
 
 
-## Built with ❤️ by Yaroslav
+Built with ❤️ by Yaroslav
