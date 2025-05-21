@@ -38,7 +38,11 @@ func startGame() {
 			}
 			fmt.Println()
 			game.PrintBoard(board)
-			fmt.Printf("Your move is %v, %v\n", move[0]+1, move[1]+1)
+			fmt.Printf("Your move is: %v row, %v column\n", move[0]+1, move[1]+1)
+
+			if won {
+				fmt.Printf("\n🎂 Congratulations, %s! You won the game! 🥳 🎊\n", turn)
+			}
 		}
 		if ui.PlayAgain() != "y" {
 			playAgain = false

@@ -14,7 +14,7 @@ func CheckMove(board [3][3]string, move [2]int, turn string) bool {
 		board[move[0]][move[1]] = turn
 		return true
 	} else {
-		fmt.Println("\ncell is already occupied, try again")
+		fmt.Println("\nThis cell is already occupied, try another one")
 	}
 	return false
 }

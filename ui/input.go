@@ -34,7 +34,7 @@ func TakeMove() [2]int {
 }
 
 func PlayAgain() string {
-	fmt.Println("Thanks for your game, do you wanna play again? (Y/N)")
+	fmt.Println("\nType 'y' to play again:")
 	answer := ""
 	fmt.Scan(&answer)
 	answer = strings.TrimSpace(strings.ToLower(answer))
