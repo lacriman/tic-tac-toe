@@ -17,7 +17,7 @@ func startGame() {
 
 	continueGame := true
 	for continueGame {
-		move := ui.MakeMove()
+		move := ui.TakeMove()
 		fmt.Println()
 		game.PrintBoard(board)
 		fmt.Printf("Your move is %v", move)
