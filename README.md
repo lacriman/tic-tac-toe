@@ -16,11 +16,12 @@ A clean, modular Tic Tac Toe implementation in Go with CLI interface, featuring 
 ```bash
 git clone https://github.com/lacriman/tic-tac-toe.git
 cd tic-tac-toe
-go run main.go
+go run main.go 
+```
 
 
 
-🏗️ Project Structure
+## 🏗️ Project Structure
 
 tic-tac-toe/
 ├── main.go            # Entry point & game loop
@@ -34,17 +35,17 @@ tic-tac-toe/
 
 
 
-🎮 How to Play
+## 🎮 How to Play
 
-Players alternate turns entering coordinates (1-3 for row and column)
+- Players alternate turns entering coordinates (1-3 for row and column)
 
-Valid moves update the board automatically
+- Valid moves update the board automatically
 
-Game continues until:
+- Game continues until:
 
-A player gets 3 in a row (win)
+- A player gets 3 in a row (win)
 
-All cells are filled (draw)
+- All cells are filled (draw)
 
 Example move:
 
@@ -55,16 +56,16 @@ Enter column (1-3): 2
 
 
 
-🧠 Design Philosophy
+## 🧠 Design Philosophy
 
-Modularity: Clean separation between game logic and UI
+- Modularity: Clean separation between game logic and UI
 
-Testability: Packages structured for easy unit testing
+- Testability: Packages structured for easy unit testing
 
-Error Handling: Graceful recovery from invalid inputs
+- Error Handling: Graceful recovery from invalid inputs
 
-Simplicity: Minimal code for maximum clarity
+- Simplicity: Minimal code for maximum clarity
 
 
 
-Built with ❤️ by Yaroslav
+## Built with ❤️ by Yaroslav
