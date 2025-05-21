@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/lacriman/tic-tac-toe/game"
 	"github.com/lacriman/tic-tac-toe/ui"
@@ -16,30 +15,31 @@ func main() {
 func startGame() {
 	playAgain := true
 	for playAgain {
-		
-		board := game.ClearBoard()
+		board := game.ClearBoard() //empty board
 		turn := "X"
 		moves := 0
 		won := false
 		for !won && moves < 9 {
 			fmt.Println()
-			move := ui.TakeMove()
+			move := ui.TakeMove() // position for x - [1 0]
 			moves++
-			fmt.Printf("Moves: %d", moves)
-			
-			board, err := game.CheckMove(board, move, turn)
-			for err != nil {
-				fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-				move := ui.TakeMove()
-				game.CheckMove(board, move, turn)
+			// fmt.Printf("Moves: %d", moves)
+			for {
+				if game.CheckMove(board, move, turn) {
+					board[move[0]][move[1]] = turn
+					won = game.CheckWin(board, turn)
+					turn = game.ChangeTurn(turn)
+					break
+				} else {
+					move = ui.TakeMove() // position for x - [1 0]
+					game.CheckMove(board, move, turn)
+					continue
+				}
 			}
-
-			turn = game.ChangeTurn(turn)
 			fmt.Println()
 			game.PrintBoard(board)
-			fmt.Printf("Your move is %v\n", move)
+			fmt.Printf("Your move is %v, %v\n", move[0]+1, move[1]+1)
 		}
-
 		if ui.PlayAgain() != "y" {
 			playAgain = false
 		}

@@ -3,14 +3,14 @@ package game
 import "fmt"
 
 func ClearBoard() [3][3]string {
-	var board [3][3]string
+	var clearBoard [3][3]string
 
-	for i := range board {
-		for j := range board[i] {
-			board[i][j] = " "
+	for i := range clearBoard {
+		for j := range clearBoard[i] {
+			clearBoard[i][j] = " "
 		}
 	}
-	return board
+	return clearBoard
 }
 
 func PrintBoard(board [3][3]string) {

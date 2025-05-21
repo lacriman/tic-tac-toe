@@ -1,6 +1,6 @@
 package game
 
-import "errors"
+import "fmt"
 
 func ChangeTurn(turn string) string {
 	if turn == "X" {
@@ -9,11 +9,12 @@ func ChangeTurn(turn string) string {
 	return "X"
 }
 
-func CheckMove(board [3][3]string, move [2]int, turn string) ([3][3]string, error) {
+func CheckMove(board [3][3]string, move [2]int, turn string) bool {
 	if board[move[0]][move[1]] == " " {
 		board[move[0]][move[1]] = turn
+		return true
 	} else {
-		return board, errors.New("cell is already occupied, try again")
+		fmt.Println("\ncell is already occupied, try again")
 	}
-	return board, nil
+	return false
 }
