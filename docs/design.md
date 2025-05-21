@@ -13,12 +13,10 @@ Tic Tac Toe
     - check for a column
     - check if the input is a num
     - check if 0 < x <= 3
-    - return num-1 (index for an arrayw)
+    - return num-1 (index for an array)
     - repeat for a row
 
-- game rule validation (is the move within bounds? Is the cell empty?)
-
-- check if there a place for a move
+- check if the cell is empty?
 
 - add user's move on the board
 
