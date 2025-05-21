@@ -7,7 +7,7 @@ func ClearBoard() [3][3]string {
 
 	for i := range board {
 		for j := range board[i] {
-			board[i][j] = "  "
+			board[i][j] = " "
 		}
 	}
 	return board
@@ -15,9 +15,9 @@ func ClearBoard() [3][3]string {
 
 func PrintBoard(board[3][3]string) {
 	for i := 0; i < 3; i++ {
-		fmt.Printf("%v | %v | %v\n", board[i][0], board[i][1], board[i][2])
+		fmt.Printf(" %v | %v | %v \n", board[i][0], board[i][1], board[i][2])
 		if i < 2 {
-			fmt.Println("---+----+---")
+			fmt.Println("---+---+---")
 		}
 	}
 }
