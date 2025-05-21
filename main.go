@@ -14,27 +14,34 @@ func main() {
 }
 
 func startGame() {
-	board := game.ClearBoard()
-	turn := "X"
-	won := false
-	continueGame := true
-
-	for continueGame {
-		move := ui.TakeMove()
-		board, err := game.CheckMove(board, move, turn)
-		for err != nil {
-			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+	playAgain := true
+	for playAgain {
+		
+		board := game.ClearBoard()
+		turn := "X"
+		moves := 0
+		won := false
+		for !won && moves < 9 {
+			fmt.Println()
 			move := ui.TakeMove()
-			game.CheckMove(board, move, turn)
-		}
-		turn = game.ChangeTurn(turn)
-		fmt.Println()
-		game.PrintBoard(board)
-		fmt.Printf("Your move is %v", move)
+			moves++
+			fmt.Printf("Moves: %d", moves)
+			
+			board, err := game.CheckMove(board, move, turn)
+			for err != nil {
+				fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+				move := ui.TakeMove()
+				game.CheckMove(board, move, turn)
+			}
 
-		won = true
-		if won {
-			break
+			turn = game.ChangeTurn(turn)
+			fmt.Println()
+			game.PrintBoard(board)
+			fmt.Printf("Your move is %v\n", move)
+		}
+
+		if ui.PlayAgain() != "y" {
+			playAgain = false
 		}
 	}
 }

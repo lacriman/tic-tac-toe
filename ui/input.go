@@ -34,3 +34,12 @@ func TakeMove() [2]int {
 	move[1] = row
 	return move
 }
+
+func PlayAgain() string {
+	fmt.Println("Thanks for your game, do you wanna play again? (Y/N)")
+	answer := ""
+	fmt.Scan(&answer)
+	answer = strings.TrimSpace(strings.ToLower(answer))
+	fmt.Println()
+	return answer
+}
