@@ -1,0 +1,14 @@
+# Go binaries (only needed if built into project root)
+main
+main.exe
+
+# Logs
+*.log
+build-errors.log  # specifically from air, in case others are excluded later
+
+# Air's build output
+tmp/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
