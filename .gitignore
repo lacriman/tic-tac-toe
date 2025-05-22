@@ -8,6 +8,7 @@ build-errors.log  # specifically from air, in case others are excluded later
 
 # Air's build output
 tmp/
+.air.toml
 
 # OS-specific files
 .DS_Store
