@@ -19,8 +19,11 @@ func startGame() {
 		turn := "X"
 		moves := 0
 		won := false
+		game.PrintBoard(board)
+		fmt.Println()
 		for !won && moves < 9 {
 			fmt.Println()
+
 			move := ui.TakeMove() // position for x - [1 0]
 			moves++
 			// fmt.Printf("Moves: %d", moves)
