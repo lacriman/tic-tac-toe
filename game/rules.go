@@ -1,13 +1,26 @@
 package game
 
 func CheckWin(board [3][3]string, turn string) bool {
-	for i := 0; i < 3; {
+	// horizontal lines
+	for i := 0; i < len(board); {
 		if board[i][0] == turn && board[i][1] == turn && board[i][2] == turn {
 			return true
 		} else {
 			i++
 		}
 	}
+
+	// vertical lines
+	for j := 0; j < len(board); {
+		if board[0][j] == turn && board[1][j] == turn && board[2][j] == turn {
+			return true
+		} else {
+			j++
+		}
+	}
+
+	
+
 	return false
 }
 
