@@ -24,7 +24,7 @@ func validateInput(message string) int {
 	}
 }
 
-func TakeMove() [2]int {
+func PromptForCoordinate() [2]int {
 	column := validateInput("Write a number of a row (1-3): ")
 	row := validateInput("Write a number of a column (1-3): ")
 	var move [2]int

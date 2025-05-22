@@ -2,7 +2,7 @@ package game
 
 import "fmt"
 
-func ClearBoard() [3][3]string {
+func NewBoard() [3][3]string {
 	var clearBoard [3][3]string
 
 	for i := range clearBoard {

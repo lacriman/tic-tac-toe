@@ -1,6 +1,6 @@
 package game
 
-func CheckWin(board [3][3]string, turn string) bool {
+func CheckForWin(board [3][3]string, turn string) bool {
 	return checkVertical(board, turn) || checkHorizontal(board, turn) || checkDiagonal(board, turn)
 }
 
