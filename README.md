@@ -14,7 +14,7 @@ A clean, modular Tic Tac Toe implementation in Go with CLI interface, featuring 
 ## 📦 Installation
 
 ```bash
-git clone https://github.com/lacriman/tic-tac-toe.git
+git clone https://github.com/lacriman/tic-tac-toe
 cd tic-tac-toe
 go run main.go 
 ```
@@ -30,7 +30,7 @@ tic-tac-toe/
 ├── game/              # Core game logic
 │   ├── board.go       # Board state management
 │   ├── rules.go       # Win/draw detection
-│   └── validate.go    # Move validation
+│   └── engine.go      # Move logic
 └── ui/                # User interface
     └── input.go       # Input handling & prompts
 ```
@@ -66,7 +66,6 @@ Enter column (1-3): 2
 - Error Handling: Graceful recovery from invalid inputs
 
 - Simplicity: Minimal code for maximum clarity
-
 
 
 Built with ❤️ by Yaroslav
