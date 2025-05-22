@@ -24,7 +24,7 @@ func checkVertical(board [3][3]string, turn string) bool {
 	matchingCells := 0
 	for column := range board {
 		for row := range board[column] {
-			if board[column][row] == turn {
+			if board[row][column] == turn {
 				matchingCells++
 				if matchingCells == 3 {
 					return true
