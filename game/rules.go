@@ -5,33 +5,33 @@ func CheckForWin(board [3][3]string, turn string) bool {
 }
 
 func checkHorizontal(board [3][3]string, turn string) bool {
-	winPoints := 0
+	matchingCells := 0
 	for row := range board {
 		for column := range board[row] {
 			if board[row][column] == turn {
-				winPoints++
-				if winPoints == 3 {
+				matchingCells++
+				if matchingCells == 3 {
 					return true
 				}
 			}
 		}
-		winPoints = 0
+		matchingCells = 0
 	}
 	return false
 }
 
 func checkVertical(board [3][3]string, turn string) bool {
-	winPoint := 0
+	matchingCells := 0
 	for column := range board {
 		for row := range board[column] {
 			if board[column][row] == turn {
-				winPoint++
-				if winPoint == 3 {
+				matchingCells++
+				if matchingCells == 3 {
 					return true
 				}
 			}
 		}
-		winPoint = 0
+		matchingCells = 0
 	}
 	return false
 }
