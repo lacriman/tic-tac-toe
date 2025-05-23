@@ -111,6 +111,16 @@ func (g *Game) checkDiagonal(board [3][3]string, CurrentPlayer string) bool {
 
 // ------------------------------------------------------------------------
 
+func (g *Game) ApplyMove() bool {
+	if g.Board[g.Coords[0]][g.Coords[1]] == " " {
+		g.Board[g.Coords[0]][g.Coords[1]] = g.CurrentPlayer
+		return true
+	} else {
+		fmt.Println("\nThis cell is already occupied, try another one")
+	}
+	return false
+}
+
 func (g *Game) DidWon() {
 	g.Winner = g.CurrentPlayer
 	g.Won = true
