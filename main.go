@@ -2,13 +2,25 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/lacriman/tic-tac-toe/game"
 )
 
+func homeHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	fmt.Fprint(w, "Welcome to the Tic Tac Toe!")
+}
+
 func main() {
-	fmt.Println("Welcome to the Tic Tac Toe!")
-	startGame()
+	r := chi.NewRouter()
+	r.Get("/", homeHandler)
+	r.NotFound(func(w http.ResponseWriter, r *http.Request) {
+		http.Error(w, "Page not found", http.StatusNotFound)
+	})
+	fmt.Println("Starting the server on :3000...")
+	// startGame()
 }
 
 func startGame() {
