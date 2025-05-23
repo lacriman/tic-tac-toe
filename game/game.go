@@ -67,19 +67,20 @@ func (g *Game) NextPlayer() {
 }
 
 // ------- Win Logic ------------------------------------------------------
+
 func (g *Game) CheckForWin() bool {
-	if g.checkVertical(g.Board, g.CurrentPlayer) || g.checkHorizontal(g.Board, g.CurrentPlayer) || g.checkDiagonal(g.Board, g.CurrentPlayer) {
+	if g.checkVertical() || g.checkHorizontal() || g.checkDiagonal() {
 		g.Winner = g.CurrentPlayer
 		return true
 	}
 	return false
 }
 
-func (g *Game) checkHorizontal(board [3][3]string, CurrentPlayer string) bool {
+func (g *Game) checkVertical() bool {
 	matchingCells := 0
-	for row := range board {
-		for column := range board[row] {
-			if board[row][column] == CurrentPlayer {
+	for column := range g.Board {
+		for row := range g.Board[column] {
+			if g.Board[row][column] == g.CurrentPlayer {
 				matchingCells++
 				if matchingCells == 3 {
 					return true
@@ -91,11 +92,11 @@ func (g *Game) checkHorizontal(board [3][3]string, CurrentPlayer string) bool {
 	return false
 }
 
-func (g *Game) checkVertical(board [3][3]string, CurrentPlayer string) bool {
+func (g *Game) checkHorizontal() bool {
 	matchingCells := 0
-	for column := range board {
-		for row := range board[column] {
-			if board[row][column] == CurrentPlayer {
+	for row := range g.Board {
+		for column := range g.Board[row] {
+			if g.Board[row][column] == g.CurrentPlayer {
 				matchingCells++
 				if matchingCells == 3 {
 					return true
@@ -107,20 +108,20 @@ func (g *Game) checkVertical(board [3][3]string, CurrentPlayer string) bool {
 	return false
 }
 
-func (g *Game) checkDiagonal(board [3][3]string, CurrentPlayer string) bool {
+func (g *Game) checkDiagonal() bool {
 	diag1, diag2 := 0, 0
-	for i := 0; i < 3; i++ {
-		if board[i][i] == CurrentPlayer {
+	for i := range 3 {
+		if g.Board[i][i] == g.CurrentPlayer {
 			diag1++
 		}
-		if board[i][2-i] == CurrentPlayer {
+		if g.Board[i][2-i] == g.CurrentPlayer {
 			diag2++
 		}
 	}
 	return diag1 == 3 || diag2 == 3
 }
 
-// ------- Add Move ------------------------------------------------------
+// ------- Move Logic ------------------------------------------------------
 
 func (g *Game) PromptForCoordinate() {
 	column := ui.ValidateInput("Write a number of a row (1-3): ")
@@ -138,6 +139,8 @@ func (g *Game) ApplyMove() bool {
 	}
 	return false
 }
+
+// ------- Other ------------------------------------------------------
 
 func (g *Game) DidWon() {
 	g.Winner = g.CurrentPlayer
