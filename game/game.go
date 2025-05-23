@@ -62,18 +62,20 @@ func (g *Game) AskPlayAgain() {
 func (g *Game) NextPlayer() {
 	if g.CurrentPlayer == "X" {
 		g.CurrentPlayer = "O"
+	} else {
+		g.CurrentPlayer = "X"
 	}
-	g.CurrentPlayer = "X"
 }
 
 // ------- Win Logic ------------------------------------------------------
 
-func (g *Game) CheckForWin() bool {
+func (g *Game) CheckForWin() {
 	if g.checkVertical() || g.checkHorizontal() || g.checkDiagonal() {
 		g.Winner = g.CurrentPlayer
-		return true
+		g.Won = true
+		return
 	}
-	return false
+	g.Won = false
 }
 
 func (g *Game) checkVertical() bool {
@@ -124,10 +126,8 @@ func (g *Game) checkDiagonal() bool {
 // ------- Move Logic ------------------------------------------------------
 
 func (g *Game) PromptForCoordinate() {
-	column := ui.ValidateInput("Write a number of a row (1-3): ")
-	row := ui.ValidateInput("Write a number of a column (1-3): ")
-	g.Coords[0] = column
-	g.Coords[1] = row
+	g.Coords[0] = ui.ValidateInput("Write a number of a row (1-3): ")
+	g.Coords[1] = ui.ValidateInput("Write a number of a column (1-3): ")
 }
 
 func (g *Game) ApplyMove() bool {
@@ -136,16 +136,11 @@ func (g *Game) ApplyMove() bool {
 		return true
 	} else {
 		fmt.Println("\nThis cell is already occupied, try another one")
+		return false
 	}
-	return false
 }
 
 // ------- Other ------------------------------------------------------
-
-func (g *Game) DidWon() {
-	g.Winner = g.CurrentPlayer
-	g.Won = true
-}
 
 func (g *Game) IncMove() {
 	g.Moves++

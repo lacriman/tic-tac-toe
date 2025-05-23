@@ -28,12 +28,11 @@ func startGame() {
 
 			for {
 				if gameInstance.ApplyMove() {
-					gameInstance.DidWon()
+					gameInstance.CheckForWin()
 					gameInstance.NextPlayer()
 					break
 				} else {
 					gameInstance.PromptForCoordinate() // position for x - [1 0]
-					gameInstance.ApplyMove()
 					continue
 				}
 			}
