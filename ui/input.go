@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func validateInput(message string) int {
+func ValidateInput(message string) int {
 	scanner := bufio.NewScanner(os.Stdin)
 	fmt.Println(message)
 	for {
@@ -24,20 +24,12 @@ func validateInput(message string) int {
 	}
 }
 
-func PromptForCoordinate() [2]int {
-	column := validateInput("Write a number of a row (1-3): ")
-	row := validateInput("Write a number of a column (1-3): ")
-	var move [2]int
-	move[0] = column
-	move[1] = row
-	return move
-}
 
-func PlayAgain() string {
-	fmt.Println("\nType 'y' to play again:")
-	answer := ""
-	fmt.Scan(&answer)
-	answer = strings.TrimSpace(strings.ToLower(answer))
-	fmt.Println()
-	return answer
-}
+// func PlayAgain() string {
+// 	fmt.Println("\nType 'y' to play again:")
+// 	answer := ""
+// 	fmt.Scan(&answer)
+// 	answer = strings.TrimSpace(strings.ToLower(answer))
+// 	fmt.Println()
+// 	return answer
+// }

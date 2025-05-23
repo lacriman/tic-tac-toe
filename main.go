@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/lacriman/tic-tac-toe/game"
-	"github.com/lacriman/tic-tac-toe/ui"
 )
 
 func main() {
@@ -16,6 +15,7 @@ func startGame() {
 	gameInstance := game.NewGame()
 
 	for gameInstance.PlayAgain {
+		gameInstance = game.NewGame()
 		gameInstance.NewBoard()
 		gameInstance.PrintBoard()
 		fmt.Println()
@@ -23,7 +23,7 @@ func startGame() {
 		for !gameInstance.Won && gameInstance.Moves < 9 {
 			fmt.Println()
 
-			coords := ui.PromptForCoordinate() // position for x - [1 0]
+			gameInstance.PromptForCoordinate() // position for x - [1 0]
 			gameInstance.IncMove()
 
 			for {
@@ -32,14 +32,14 @@ func startGame() {
 					gameInstance.NextPlayer()
 					break
 				} else {
-					gameInstance.Coords = ui.PromptForCoordinate() // position for x - [1 0]
+					gameInstance.PromptForCoordinate() // position for x - [1 0]
 					gameInstance.ApplyMove()
 					continue
 				}
 			}
 			fmt.Println()
 			gameInstance.PrintBoard()
-			fmt.Printf("Your move is: %v row, %v column\n", coords[0]+1, coords[1]+1)
+			fmt.Printf("Your move is: %v row, %v column\n", gameInstance.Coords[0]+1, gameInstance.Coords[1]+1)
 
 			if gameInstance.Won {
 				fmt.Printf("\n🎂 Congratulations, %s! You won the game! 🥳 🎊\n", gameInstance.Winner)
