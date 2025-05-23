@@ -3,6 +3,8 @@ package game
 import (
 	"fmt"
 	"strings"
+
+	"github.com/lacriman/tic-tac-toe/ui"
 )
 
 type Game struct {
@@ -48,8 +50,6 @@ func (g *Game) PrintBoard() {
 	}
 }
 
-
-
 func (g *Game) AskPlayAgain() {
 	fmt.Println("\nType 'y' to play again:")
 	answer := ""
@@ -67,7 +67,6 @@ func (g *Game) NextPlayer() {
 }
 
 // ------- Win Logic ------------------------------------------------------
-
 func (g *Game) CheckForWin() bool {
 	if g.checkVertical(g.Board, g.CurrentPlayer) || g.checkHorizontal(g.Board, g.CurrentPlayer) || g.checkDiagonal(g.Board, g.CurrentPlayer) {
 		g.Winner = g.CurrentPlayer
@@ -121,7 +120,14 @@ func (g *Game) checkDiagonal(board [3][3]string, CurrentPlayer string) bool {
 	return diag1 == 3 || diag2 == 3
 }
 
-// ------------------------------------------------------------------------
+// ------- Add Move ------------------------------------------------------
+
+func (g *Game) PromptForCoordinate() {
+	column := ui.ValidateInput("Write a number of a row (1-3): ")
+	row := ui.ValidateInput("Write a number of a column (1-3): ")
+	g.Coords[0] = column
+	g.Coords[1] = row
+}
 
 func (g *Game) ApplyMove() bool {
 	if g.Board[g.Coords[0]][g.Coords[1]] == " " {
