@@ -13,42 +13,39 @@ func main() {
 }
 
 func startGame() {
-	playAgain := true
-	for playAgain {
-		board := game.NewBoard() //empty board
-		currentPlayer := "X"
-		moves := 0
-		won := false
-		game.PrintBoard(board)
+	gameInstance := game.NewGame()
+
+	for gameInstance.PlayAgain {
+		gameInstance.NewBoard()
+		game.PrintBoard(gameInstance.Board)
 		fmt.Println()
-		for !won && moves < 9 {
+
+		for !gameInstance.Won && gameInstance.Moves < 9 {
 			fmt.Println()
 
 			coords := ui.PromptForCoordinate() // position for x - [1 0]
-			moves++
-			// fmt.Printf("Moves: %d", moves)
+			gameInstance.IncMove()
+
 			for {
-				if game.ApplyMove(board, coords, currentPlayer) {
-					board[coords[0]][coords[1]] = currentPlayer
-					won = game.CheckForWin(board, currentPlayer)
-					currentPlayer = game.NextPlayer(currentPlayer)
+				if game.ApplyMove(gameInstance.Board, gameInstance.Coords, gameInstance.CurrentPlayer) {
+					gameInstance.Board[gameInstance.Coords[0]][gameInstance.Coords[1]] = gameInstance.CurrentPlayer
+					gameInstance.DidWon()
+					gameInstance.CurrentPlayer = game.NextPlayer(gameInstance.CurrentPlayer)
 					break
 				} else {
-					coords = ui.PromptForCoordinate() // position for x - [1 0]
-					game.ApplyMove(board, coords, currentPlayer)
+					gameInstance.Coords = ui.PromptForCoordinate() // position for x - [1 0]
+					game.ApplyMove(gameInstance.Board, coords, gameInstance.CurrentPlayer)
 					continue
 				}
 			}
 			fmt.Println()
-			game.PrintBoard(board)
+			game.PrintBoard(gameInstance.Board)
 			fmt.Printf("Your move is: %v row, %v column\n", coords[0]+1, coords[1]+1)
 
-			if won {
-				fmt.Printf("\n🎂 Congratulations, %s! You won the game! 🥳 🎊\n", game.NextPlayer(currentPlayer))
+			if gameInstance.Won {
+				fmt.Printf("\n🎂 Congratulations, %s! You won the game! 🥳 🎊\n", game.NextPlayer(gameInstance.CurrentPlayer))
 			}
 		}
-		if ui.PlayAgain() != "y" {
-			playAgain = false
-		}
+		gameInstance.AskPlayAgain()
 	}
 }
