@@ -17,7 +17,7 @@ func startGame() {
 
 	for gameInstance.PlayAgain {
 		gameInstance.NewBoard()
-		game.PrintBoard(gameInstance.Board)
+		gameInstance.PrintBoard()
 		fmt.Println()
 
 		for !gameInstance.Won && gameInstance.Moves < 9 {
@@ -27,23 +27,22 @@ func startGame() {
 			gameInstance.IncMove()
 
 			for {
-				if game.ApplyMove(gameInstance.Board, gameInstance.Coords, gameInstance.CurrentPlayer) {
-					gameInstance.Board[gameInstance.Coords[0]][gameInstance.Coords[1]] = gameInstance.CurrentPlayer
+				if gameInstance.ApplyMove() {
 					gameInstance.DidWon()
-					gameInstance.CurrentPlayer = game.NextPlayer(gameInstance.CurrentPlayer)
+					gameInstance.NextPlayer()
 					break
 				} else {
 					gameInstance.Coords = ui.PromptForCoordinate() // position for x - [1 0]
-					game.ApplyMove(gameInstance.Board, coords, gameInstance.CurrentPlayer)
+					gameInstance.ApplyMove()
 					continue
 				}
 			}
 			fmt.Println()
-			game.PrintBoard(gameInstance.Board)
+			gameInstance.PrintBoard()
 			fmt.Printf("Your move is: %v row, %v column\n", coords[0]+1, coords[1]+1)
 
 			if gameInstance.Won {
-				fmt.Printf("\n🎂 Congratulations, %s! You won the game! 🥳 🎊\n", game.NextPlayer(gameInstance.CurrentPlayer))
+				fmt.Printf("\n🎂 Congratulations, %s! You won the game! 🥳 🎊\n", gameInstance.Winner)
 			}
 		}
 		gameInstance.AskPlayAgain()
