@@ -1,3 +1,5 @@
+// +build ignore
+
 package game
 
 func CheckForWin(board [3][3]string, turn string) bool {
