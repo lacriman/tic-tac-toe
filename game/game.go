@@ -38,6 +38,18 @@ func (g *Game) NewBoard() {
 	g.Board = clearBoard
 }
 
+func (g *Game) PrintBoard() {
+	fmt.Println()
+	for i := range 3 {
+		fmt.Printf(" %v | %v | %v \n", g.Board[i][0], g.Board[i][1], g.Board[i][2])
+		if i < 2 {
+			fmt.Println("---+---+---")
+		}
+	}
+}
+
+
+
 func (g *Game) AskPlayAgain() {
 	fmt.Println("\nType 'y' to play again:")
 	answer := ""
