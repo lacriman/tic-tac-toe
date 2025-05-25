@@ -20,7 +20,7 @@ func main() {
 		http.Error(w, "Page not found", http.StatusNotFound)
 	})
 	fmt.Println("Starting the server on :3000...")
-	// startGame()
+	http.ListenAndServe(":3000", r)
 }
 
 func startGame() {
