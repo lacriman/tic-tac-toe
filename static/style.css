@@ -128,24 +128,29 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center;
-  color: black;
+  color: #FEECE2;
   font-size: 3rem;
   flex-direction: column;
+}
+
+.winning-message p {
+  color: #FEECE2;
 }
 
 .winning-message button {
   margin-top: 3rem;
   font-size: 3rem;
   background-color: rgb(255, 190, 152);
+  color: #FEECE2;
   border: 0px;
   padding: .55em .9em;
   cursor: pointer;
-  transition: .3s;
+  transition: .2s;
 }
 
 .winning-message button:hover {
   background-color: rgb(255, 190, 152);
-  color: #F7DED0;
+  color: #000000;
   border-color: white;
 }
 
