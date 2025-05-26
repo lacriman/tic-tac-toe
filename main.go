@@ -6,6 +6,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/lacriman/tic-tac-toe/game"
+	"github.com/lacriman/tic-tac-toe/handlers"
 )
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
@@ -13,16 +14,20 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Welcome to the Tic Tac Toe!")
 }
 
-func main() {	
+func main() {
 	r := chi.NewRouter()
 	r.Get("/", homeHandler)
 	r.NotFound(func(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Page not found", http.StatusNotFound)
 	})
 
+	r.Route("/api", func(r chi.Router) {
+		r.Post("/game", handlers.CreateGameHandler)
+	})
+
 	fs := http.FileServer(http.Dir("./static/"))
 	r.Handle("/static/*", http.StripPrefix("/static/", fs))
-	
+
 	fmt.Println("Starting the server on :3000...")
 	http.ListenAndServe(":3000", r)
 }
