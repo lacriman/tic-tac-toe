@@ -21,8 +21,9 @@ func main() {
 		http.Error(w, "Page not found", http.StatusNotFound)
 	})
 
-	r.Route("/api", func(r chi.Router) {
-		r.Post("/game", handlers.CreateGameHandler)
+	r.Route("/api/game", func(r chi.Router) {
+		r.Post("/", handlers.CreateGameHandler)
+		r.Get("/{id}", handlers.GetGameHandler)
 	})
 
 	fs := http.FileServer(http.Dir("./static/"))

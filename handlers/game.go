@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	// Universally Unique Identifier
 	"github.com/google/uuid"
 	"github.com/lacriman/tic-tac-toe/game"
 )
@@ -30,4 +31,8 @@ func CreateGameHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
+}
+
+func GetGameHandler(w http.ResponseWriter, r *http.Request)  {
+	
 }
