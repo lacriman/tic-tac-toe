@@ -7,16 +7,20 @@ const winningMessageElement = document.getElementById('winningMessage')
 const restartButton = document.getElementById('restartButton')
 const winningMessageTextElement = document.querySelector('[data-winning-message-text]')
 
-async function getData() {
-  const url = "http://localhost:3000/static/api/game/{id}"
+const response = await fetch("/api/game", { method: "POST" });
+const data = await response.json();
+const gameId = data.id;
+
+async function getData(gameId) {
+  const url = `/api/game/${gameId}`;
   try {
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`)
     }
-
     const json = await response.json();
-    console.log(json)
+
+    console.log(json);
   } catch (error) {
     console.error(error.message);
   }
