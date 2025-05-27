@@ -1,7 +1,6 @@
 const X_CLASS = 'x'
 const CIRCLE_CLASS = 'circle'
 
-const cellElements = document.querySelectorAll('[data-cell]')
 const board = document.getElementById('board')
 const winningMessageElement = document.getElementById('winningMessage')
 const restartButton = document.getElementById('restartButton')
@@ -9,9 +8,11 @@ const winningMessageTextElement = document.querySelector('[data-winning-message-
 
 let currentGameId = null;
 
-const response = await fetch("/api/game", { method: "POST" });
-const data = await response.json();
-currentGameId = data.id;
+(async () => {
+  const response = await fetch("/api/game", { method: "POST" });
+  const data = await response.json();
+  currentGameId = data.id;
+})();
 
 async function getData(gameId) {
   const url = `/api/game/${gameId}`;
@@ -28,11 +29,30 @@ async function getData(gameId) {
   }
 }
 
+function createGrid() {
+  const board = document.getElementById('board')
+  board.innerHTML = '' // Clear board before regenerating
+
+  for (let row = 0; row < 3; row++) {
+    for (let col = 0; col < 3; col++) {
+      const cell = document.createElement('div')
+      cell.classList.add('cell')
+      cell.setAttribute('data-cell', '')
+      cell.setAttribute('data-row', row)
+      cell.setAttribute('data-col', col)
+      board.appendChild(cell)
+    }
+  }
+}
+
 startGame()
 
 restartButton.addEventListener('click', startGame)
 
 function startGame() {
+  createGrid()
+  const cellElements = document.querySelectorAll('[data-cell]')
+
   cellElements.forEach(cell => {
     cell.classList.remove(X_CLASS)
     cell.classList.remove(CIRCLE_CLASS)
