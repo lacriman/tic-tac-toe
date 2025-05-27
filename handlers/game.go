@@ -16,6 +16,11 @@ type CreateGameResponse struct {
 	CurrentPlayer string       `json:"currentPlayer"`
 }
 
+type MoveRequest struct {
+	Row int `json:"row"`
+	Col int `json:"col"`
+}
+
 func CreateGameHandler(w http.ResponseWriter, r *http.Request) {
 	id := uuid.New().String()
 	newGame := game.NewGame()
@@ -43,6 +48,40 @@ func GetGameHandler(w http.ResponseWriter, r *http.Request) {
 
 	if !exists {
 		http.Error(w, "Game not found", http.StatusNotFound)
+		return
+	}
+
+	response := CreateGameResponse{
+		ID:            id,
+		Board:         gameInstance.Board,
+		CurrentPlayer: gameInstance.CurrentPlayer,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
+}
+
+func MakeMoveHandler(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	var move MoveRequest
+	if err := json.NewDecoder(r.Body).Decode(&move); err != nil {
+		http.Error(w, "Invalid input", http.StatusBadRequest)
+		return
+	}
+
+	gameMux.Lock()
+	gameInstance, exists := games[id]
+	if !exists {
+		http.Error(w, "Game not found", http.StatusNotFound)
+		return
+	}
+
+	err := gameInstance.MakeMove(move.Row, move.Col)
+	gameMux.Unlock()
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 

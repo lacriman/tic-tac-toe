@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/lacriman/tic-tac-toe/game"
 	"github.com/lacriman/tic-tac-toe/handlers"
 )
 
@@ -24,6 +23,7 @@ func main() {
 	r.Route("/api/game", func(r chi.Router) {
 		r.Post("/", handlers.CreateGameHandler)
 		r.Get("/{id}", handlers.GetGameHandler)
+		r.Post("/{id}/move", handlers.MakeMoveHandler)
 	})
 
 	fs := http.FileServer(http.Dir("./static/"))
@@ -33,39 +33,40 @@ func main() {
 	http.ListenAndServe(":3000", r)
 }
 
-func startGame() {
-	gameInstance := game.NewGame()
+// ----- Cli -------
+// func startGame() {
+// 	gameInstance := game.NewGame()
 
-	for gameInstance.PlayAgain {
-		gameInstance = game.NewGame()
-		gameInstance.NewBoard()
-		gameInstance.PrintBoard()
-		fmt.Println()
+// 	for gameInstance.PlayAgain {
+// 		gameInstance = game.NewGame()
+// 		gameInstance.NewBoard()
+// 		gameInstance.PrintBoard()
+// 		fmt.Println()
 
-		for !gameInstance.Won && gameInstance.Moves < 9 {
-			fmt.Println()
+// 		for !gameInstance.Won && gameInstance.Moves < 9 {
+// 			fmt.Println()
 
-			gameInstance.PromptForCoordinate() // position for x - [1 0]
-			gameInstance.IncMove()
+// 			gameInstance.PromptForCoordinate() // position for x - [1 0]
+// 			gameInstance.IncMove()
 
-			for {
-				if gameInstance.ApplyMove() {
-					gameInstance.CheckForWin()
-					gameInstance.NextPlayer()
-					break
-				} else {
-					gameInstance.PromptForCoordinate() // position for x - [1 0]
-					continue
-				}
-			}
-			fmt.Println()
-			gameInstance.PrintBoard()
-			fmt.Printf("Your move is: %v row, %v column\n", gameInstance.Coords[0]+1, gameInstance.Coords[1]+1)
+// 			for {
+// 				if gameInstance.ApplyMove() {
+// 					gameInstance.CheckForWin()
+// 					gameInstance.NextPlayer()
+// 					break
+// 				} else {
+// 					gameInstance.PromptForCoordinate() // position for x - [1 0]
+// 					continue
+// 				}
+// 			}
+// 			fmt.Println()
+// 			gameInstance.PrintBoard()
+// 			fmt.Printf("Your move is: %v row, %v column\n", gameInstance.Coords[0]+1, gameInstance.Coords[1]+1)
 
-			if gameInstance.Won {
-				fmt.Printf("\n🎂 Congratulations, %s! You won the game! 🥳 🎊\n", gameInstance.Winner)
-			}
-		}
-		gameInstance.AskPlayAgain()
-	}
-}
+// 			if gameInstance.Won {
+// 				fmt.Printf("\n🎂 Congratulations, %s! You won the game! 🥳 🎊\n", gameInstance.Winner)
+// 			}
+// 		}
+// 		gameInstance.AskPlayAgain()
+// 	}
+// }

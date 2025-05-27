@@ -3,8 +3,6 @@ package game
 import (
 	"fmt"
 	"strings"
-
-	"github.com/lacriman/tic-tac-toe/ui"
 )
 
 type Game struct {
@@ -125,23 +123,43 @@ func (g *Game) checkDiagonal() bool {
 
 // ------- Move Logic ------------------------------------------------------
 
-func (g *Game) PromptForCoordinate() {
-	g.Coords[0] = ui.ValidateInput("Write a number of a row (1-3): ")
-	g.Coords[1] = ui.ValidateInput("Write a number of a column (1-3): ")
+func (g *Game) MakeMove(row, col int) error {
+	if row < 0 || col > 2 || col < 0 || row > 2 {
+		return fmt.Errorf("invalid coordinates")
+	}
+	if g.Board[row][col] != " " {
+		return fmt.Errorf("cell is already occupied")
+	}
+	if g.Won {
+		return fmt.Errorf("game is already finished")
+	}
+
+	g.Board[row][col] = g.CurrentPlayer
+	g.IncMoves()
+	g.CheckForWin()
+	if !g.Won {
+		g.NextPlayer()
+	}
+	return nil
 }
 
-func (g *Game) ApplyMove() bool {
-	if g.Board[g.Coords[0]][g.Coords[1]] == " " {
-		g.Board[g.Coords[0]][g.Coords[1]] = g.CurrentPlayer
-		return true
-	} else {
-		fmt.Println("\nThis cell is already occupied, try another one")
-		return false
-	}
-}
+// func (g *Game) PromptForCoordinate() {
+// 	g.Coords[0] = ui.ValidateInput("Write a number of a row (1-3): ")
+// 	g.Coords[1] = ui.ValidateInput("Write a number of a column (1-3): ")
+// }
+
+// func (g *Game) ApplyMove() bool {
+// 	if g.Board[g.Coords[0]][g.Coords[1]] == " " {
+// 		g.Board[g.Coords[0]][g.Coords[1]] = g.CurrentPlayer
+// 		return true
+// 	} else {
+// 		fmt.Println("\nThis cell is already occupied, try another one")
+// 		return false
+// 	}
+// }
 
 // ------- Other ------------------------------------------------------
 
-func (g *Game) IncMove() {
+func (g *Game) IncMoves() {
 	g.Moves++
 }
