@@ -7,9 +7,11 @@ const winningMessageElement = document.getElementById('winningMessage')
 const restartButton = document.getElementById('restartButton')
 const winningMessageTextElement = document.querySelector('[data-winning-message-text]')
 
+let currentGameId = null;
+
 const response = await fetch("/api/game", { method: "POST" });
 const data = await response.json();
-const gameId = data.id;
+currentGameId = data.id;
 
 async function getData(gameId) {
   const url = `/api/game/${gameId}`;
@@ -40,19 +42,32 @@ function startGame() {
   winningMessageElement.classList.remove('show')
 }
 
-function handleClick(e) {
+async function handleClick(e) {
   const cell = e.target
-  const currentClass = circleTurn ? CIRCLE_CLASS : X_CLASS
-  placeMark(cell, currentClass)
-  if (checkWin(currentClass)) {
-    endGame(false)
-  } else if (isDraw()) {
-    endGame(true)
-  } else {
-    swapTurns()
-    setBoardHoverClass()
+  const row = parseInt(cell.getAttribute('data-row'))
+  const col = parseInt(cell.getAttribute('data-col'))
+
+  try {
+    const res = await fetch(`/api/game/${currentGameId}/move`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ gameID: currentGameId, row, col })
+    })
+
+    if (!res.ok) {
+      const errText = await res.text()
+      throw new Error(errText || 'Move failed')
+    }
+
+    const data = await res.json()
+    updateBoardUI(data.board)
+  } catch (err) {
+    console.error("Move error:", err.message)
   }
 }
+
 
 function endGame(draw, winner) {
   if (draw) {

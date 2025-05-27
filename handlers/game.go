@@ -17,6 +17,7 @@ type CreateGameResponse struct {
 }
 
 type MoveRequest struct {
+	GameID string `json:"gameID"`
 	Row int `json:"row"`
 	Col int `json:"col"`
 }
@@ -73,6 +74,7 @@ func MakeMoveHandler(w http.ResponseWriter, r *http.Request) {
 	gameMux.Lock()
 	gameInstance, exists := games[id]
 	if !exists {
+		gameMux.Unlock()
 		http.Error(w, "Game not found", http.StatusNotFound)
 		return
 	}
