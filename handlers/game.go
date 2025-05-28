@@ -18,8 +18,8 @@ type CreateGameResponse struct {
 
 type MoveRequest struct {
 	GameID string `json:"gameID"`
-	Row int `json:"row"`
-	Col int `json:"col"`
+	Row    int    `json:"row"`
+	Col    int    `json:"col"`
 }
 
 func CreateGameHandler(w http.ResponseWriter, r *http.Request) {
