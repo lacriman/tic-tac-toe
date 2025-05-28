@@ -1,5 +1,5 @@
 const X_CLASS = "x";
-const CIRCLE_CLASS = "circle";
+const O_CLASS = "o";
 
 const board = document.getElementById("board");
 const winningMessageElement = document.getElementById("winningMessage");
@@ -44,7 +44,14 @@ function renderBoard(board) {
 
     row.forEach((cell, colIndex) => {
       const cellDiv = document.createElement("div");
-      cellDiv.className = "cell";
+      if (cell == "X") {
+        cellDiv.className = "cell x";
+      } else if (cell == "O") {
+        cellDiv.className = "cell o";
+      } else {
+        cellDiv.className = "cell";
+      }
+
       cellDiv.textContent = cell === " " ? "" : cell;
 
       cellDiv.setAttribute("data-row", rowIndex);
@@ -57,10 +64,9 @@ function renderBoard(board) {
       rowDiv.appendChild(cellDiv);
     });
 
-    boardDiv.appendChild(rowDiv); 
+    boardDiv.appendChild(rowDiv);
   });
 }
-
 
 restartButton.addEventListener("click", startGame);
 
@@ -75,16 +81,16 @@ function startGame() {
 
   cellElements.forEach((cell) => {
     cell.classList.remove(X_CLASS);
-    cell.classList.remove(CIRCLE_CLASS);
+    cell.classList.remove(O_CLASS);
     cell.removeEventListener("click", handleClick);
     cell.addEventListener("click", handleClick);
   });
   winningMessageElement.classList.remove("show");
 }
 
-function placeMark(cell, currentClass) {
-  cell.classList.add(currentClass);
-}
+// function placeMark(cell, currentClass) {
+//   cell.classList.add(currentClass);
+// }
 
 async function handleClick(e) {
   const cell = e.target;
