@@ -50,7 +50,6 @@ function renderBoard(board) {
 }
 
 async function startGame() {
-  winningMessageElement.classList.remove("show");
   try {
     const res = await fetch(`/api/game/${currentGameId}`);
     const data = await res.json();
@@ -99,4 +98,10 @@ function endGame(winner) {
   winningMessageElement.classList.add("show");
 }
 
-restartButton.addEventListener("click", startGame);
+restartButton.addEventListener("click", async () => {
+  winningMessageElement.classList.remove("show");
+  const res = await fetch("/api/game", {method: "POST"});
+  const data = await res.json();
+  currentGameId = data.id;
+  renderBoard(data.board)
+});
