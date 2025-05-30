@@ -1,7 +1,7 @@
 const X_CLASS = "x";
 const O_CLASS = "o";
 
-const board = document.getElementById("board");
+const boardElement = document.getElementById("board");
 const winningMessageElement = document.getElementById("winningMessage");
 const restartButton = document.getElementById("restartButton");
 const winningMessageTextElement = document.querySelector(
@@ -19,24 +19,8 @@ let currentGameId = null;
   startGame();
 })();
 
-async function getData(gameId) {
-  const url = `/api/game/${gameId}`;
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
-    }
-    const json = await response.json();
-
-    console.log(json);
-  } catch (error) {
-    console.error(error.message);
-  }
-}
-
 function renderBoard(board) {
-  const boardDiv = document.getElementById("board");
-  boardDiv.innerHTML = "";
+  boardElement.innerHTML = "";
 
   board.forEach((row, rowIndex) => {
     const rowDiv = document.createElement("div");
@@ -44,53 +28,36 @@ function renderBoard(board) {
 
     row.forEach((cell, colIndex) => {
       const cellDiv = document.createElement("div");
-      if (cell == "X") {
-        cellDiv.className = "cell x";
-      } else if (cell == "O") {
-        cellDiv.className = "cell o";
+      cellDiv.classList.add("cell");
+
+      const lower = cell.toLowerCase();
+      if (lower === "x" || lower === "o") {
+        cellDiv.classList.add(lower);
+        cellDiv.textContent = cell;
       } else {
-        cellDiv.className = "cell";
-      }
-
-      cellDiv.textContent = cell === " " ? "" : cell;
-
-      cellDiv.setAttribute("data-row", rowIndex);
-      cellDiv.setAttribute("data-col", colIndex);
-
-      if (cell === " ") {
+        cellDiv.textContent = "";
         cellDiv.addEventListener("click", handleClick);
       }
+
+      cellDiv.dataset.row = rowIndex;
+      cellDiv.dataset.col = colIndex;
 
       rowDiv.appendChild(cellDiv);
     });
 
-    boardDiv.appendChild(rowDiv);
+    boardElement.appendChild(rowDiv);
   });
 }
 
-restartButton.addEventListener("click", startGame);
-
-function startGame() {
-  fetch(`/api/game/${currentGameId}`)
-    .then((res) => res.json())
-    .then((data) => {
-      renderBoard(data.board);
-    });
-
-  const cellElements = document.querySelectorAll("[data-cell]");
-
-  cellElements.forEach((cell) => {
-    cell.classList.remove(X_CLASS);
-    cell.classList.remove(O_CLASS);
-    cell.removeEventListener("click", handleClick);
-    cell.addEventListener("click", handleClick);
-  });
-  winningMessageElement.classList.remove("show");
+async function startGame() {
+  try {
+    const res = await fetch(`/api/game/${currentGameId}`);
+    const data = await res.json();
+    renderBoard(data.board);
+  } catch (err) {
+    console.error("Failed to start game: ", err.message);
+  }
 }
-
-// function placeMark(cell, currentClass) {
-//   cell.classList.add(currentClass);
-// }
 
 async function handleClick(e) {
   const cell = e.target;
@@ -103,11 +70,7 @@ async function handleClick(e) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        gameID: currentGameId,
-        row,
-        col,
-      }),
+      body: JSON.stringify({ row, col }),
     });
 
     if (!res.ok) {
@@ -122,11 +85,13 @@ async function handleClick(e) {
   }
 }
 
-function endGame(draw, winner) {
-  if (draw) {
+function endGame(winner) {
+  if ("tie") {
     winningMessageTextElement.innerText = `It's a tie 😔`;
   } else {
     winningMessageTextElement.innerText = `${winner} wins 🥳🥳🎊🎂`;
   }
   winningMessageElement.classList.add("show");
 }
+
+restartButton.addEventListener("click", startGame);
