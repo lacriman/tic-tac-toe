@@ -110,7 +110,7 @@ func (g *Game) checkHorizontal() bool {
 
 func (g *Game) checkDiagonal() bool {
 	diag1, diag2 := 0, 0
-	for i := range 3 {
+	for i := 0; i < 3; i++ {
 		if g.Board[i][i] == g.CurrentPlayer {
 			diag1++
 		}
@@ -124,39 +124,45 @@ func (g *Game) checkDiagonal() bool {
 // ------- Move Logic ------------------------------------------------------
 
 func (g *Game) MakeMove(row, col int) error {
-	if row < 0 || col > 2 || col < 0 || row > 2 {
+	if row < 0 || row > 2 || col < 0 || col > 2 {
 		return fmt.Errorf("invalid coordinates")
 	}
 	if g.Board[row][col] != " " {
 		return fmt.Errorf("cell is already occupied")
 	}
-	if g.Won {
+	if g.Won || g.Moves == 9 {
 		return fmt.Errorf("game is already finished")
 	}
 
 	g.Board[row][col] = g.CurrentPlayer
 	g.IncMoves()
 	g.CheckForWin()
-	if !g.Won {
-		g.NextPlayer()
+
+	if g.Won {
+		g.Winner = g.CurrentPlayer
+		return nil
 	}
+
+	if g.Moves == 9 {
+		g.Won = true
+		// g.Winner stays empty for a draw
+		return nil
+	}
+
+	g.NextPlayer()
 	return nil
 }
 
-// func (g *Game) PromptForCoordinate() {
-// 	g.Coords[0] = ui.ValidateInput("Write a number of a row (1-3): ")
-// 	g.Coords[1] = ui.ValidateInput("Write a number of a column (1-3): ")
-// }
+// ------- Get status and winner ------------------------------------------------------
 
-// func (g *Game) ApplyMove() bool {
-// 	if g.Board[g.Coords[0]][g.Coords[1]] == " " {
-// 		g.Board[g.Coords[0]][g.Coords[1]] = g.CurrentPlayer
-// 		return true
-// 	} else {
-// 		fmt.Println("\nThis cell is already occupied, try another one")
-// 		return false
-// 	}
-// }
+func (g *Game) GetStatusAndWinner() (string, string) {
+	if g.Won {
+		return "won", g.Winner
+	} else if g.Moves == 9 {
+		return "draw", ""
+	}
+	return "in_progress", ""
+}
 
 // ------- Other ------------------------------------------------------
 

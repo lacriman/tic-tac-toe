@@ -50,6 +50,7 @@ function renderBoard(board) {
 }
 
 async function startGame() {
+  winningMessageElement.classList.remove("show");
   try {
     const res = await fetch(`/api/game/${currentGameId}`);
     const data = await res.json();
@@ -80,13 +81,17 @@ async function handleClick(e) {
 
     const data = await res.json();
     renderBoard(data.board);
+
+    if (data.status === "won") {
+      endGame(data.winner);
+    }
   } catch (err) {
     console.error("Move error:", err.message);
   }
 }
 
 function endGame(winner) {
-  if ("tie") {
+  if (!winner) {
     winningMessageTextElement.innerText = `It's a tie 😔`;
   } else {
     winningMessageTextElement.innerText = `${winner} wins 🥳🥳🎊🎂`;

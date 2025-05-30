@@ -14,6 +14,9 @@ type CreateGameResponse struct {
 	ID            string       `json:"id"`
 	Board         [3][3]string `json:"board"`
 	CurrentPlayer string       `json:"currentPlayer"`
+	// YourPlayer    string       `json:"yourPlayer"`
+	Status string `json:"status"`
+	Winner string `json:"winner"`
 }
 
 type MoveRequest struct {
@@ -87,10 +90,13 @@ func MakeMoveHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	status, winner := gameInstance.GetStatusAndWinner()
 	response := CreateGameResponse{
 		ID:            id,
 		Board:         gameInstance.Board,
 		CurrentPlayer: gameInstance.CurrentPlayer,
+		Status:        status,
+		Winner:        winner,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
