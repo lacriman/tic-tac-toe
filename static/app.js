@@ -99,9 +99,9 @@ function endGame(winner) {
 }
 
 restartButton.addEventListener("click", async () => {
-  winningMessageElement.classList.remove("show");
   const res = await fetch("/api/game", {method: "POST"});
   const data = await res.json();
   currentGameId = data.id;
   renderBoard(data.board)
+  winningMessageElement.classList.remove("show");
 });
