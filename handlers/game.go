@@ -3,20 +3,23 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+	"time"
 
-	// Universally Unique Identifier
 	"github.com/go-chi/chi/v5"
+	// Universally Unique Identifier
 	"github.com/google/uuid"
 	"github.com/lacriman/tic-tac-toe/game"
 )
 
 type CreateGameResponse struct {
-	ID            string       `json:"id"`
-	Board         [3][3]string `json:"board"`
-	CurrentPlayer string       `json:"currentPlayer"`
-	// YourPlayer    string       `json:"yourPlayer"`
-	Status string `json:"status"`
-	Winner string `json:"winner"`
+	ID            string          `json:"id"`
+	Board         [3][3]string    `json:"board"`
+	CurrentPlayer string          `json:"currentPlayer"`
+	Status        string          `json:"status"`
+	Winner        string          `json:"winner,omitempty"`
+	LastUpdated   time.Time       `json:"lastUpdated"`
+	Message       string          `json:"message,omitempty"`
+	Players       game.PlayerInfo `json:"players"`
 }
 
 type MoveRequest struct {
@@ -101,4 +104,39 @@ func MakeMoveHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
+}
+
+func JoinGameHandler(w http.ResponseWriter, r *http.Request) {
+	gameID := chi.URLParam(r, "id")
+	name := r.URL.Query().Get("name")
+
+	if name == "" {
+		http.Error(w, "name required", http.StatusBadRequest)
+		return
+	}
+
+	currentGame, ok := games[gameID]
+	if !ok {
+		http.Error(w, "game not found", http.StatusBadRequest)
+		return
+	}
+
+	if len(currentGame.Players) >= 2 {
+		http.Error(w, "there are already 2 players", http.StatusBadRequest)
+		return
+	}
+
+	symbol := "X"
+	if len(currentGame.Players) == 1 {
+		symbol = "O"
+
+	}
+
+	player := game.PlayerInfo{Name: name, Symbol: symbol}
+	currentGame.Players = append(currentGame.Players, player)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "Player joined successfully",
+	})
 }

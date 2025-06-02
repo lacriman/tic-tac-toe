@@ -2,28 +2,33 @@ package game
 
 import (
 	"fmt"
-	"strings"
 )
 
 type Game struct {
 	Board         [3][3]string
-	PlayAgain     bool
 	CurrentPlayer string
 	Winner        string
 	Won           bool
 	Moves         int
 	Coords        [2]int
+	Players       []PlayerInfo
+	Status        string
+}
+
+type PlayerInfo struct {
+	Symbol string `json:"symbol"`
+	Name   string `json:"name,omitempty"`
 }
 
 func NewGame() *Game {
 	return &Game{
 		Board:         [3][3]string{{" ", " ", " "}, {" ", " ", " "}, {" ", " ", " "}},
-		PlayAgain:     true,
 		CurrentPlayer: "X",
 		Winner:        "",
 		Won:           false,
 		Moves:         0,
 		Coords:        [2]int{0, 0},
+		Players:       []PlayerInfo{},
 	}
 }
 
@@ -46,15 +51,6 @@ func (g *Game) PrintBoard() {
 			fmt.Println("---+---+---")
 		}
 	}
-}
-
-func (g *Game) AskPlayAgain() {
-	fmt.Println("\nType 'y' to play again:")
-	answer := ""
-	fmt.Scan(&answer)
-	answer = strings.TrimSpace(strings.ToLower(answer))
-	g.PlayAgain = (answer == "y")
-
 }
 
 func (g *Game) NextPlayer() {
