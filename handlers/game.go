@@ -41,6 +41,7 @@ func CreateGameHandler(w http.ResponseWriter, r *http.Request) {
 		Board:         newGame.Board,
 		CurrentPlayer: newGame.CurrentPlayer,
 		Status:        newGame.Status,
+		LastUpdated: newGame.LastUpdated,
 	}
 
 	w.Header().Set("Content-Type", "application/json")

@@ -32,7 +32,7 @@ func NewGame() *Game {
 		Coords:        [2]int{0, 0},
 		Players:       []PlayerInfo{},
 		Status:        "waiting",
-		LastUpdated:   time.Time{},
+		LastUpdated:   time.Now(),
 	}
 }
 
@@ -145,8 +145,9 @@ func (g *Game) MakeMove(row, col int) error {
 	}
 
 	if g.Moves == 9 {
-		g.Won = true
-		// g.Winner stays empty for a draw
+		g.Won = false
+		g.Winner = ""
+		g.Status = "draw"
 		return nil
 	}
 
