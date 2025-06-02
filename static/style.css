@@ -21,8 +21,9 @@ body {
 }
 
 .board {
-  width: 100vw;
-  height: 100vh;
+  margin: 0 auto;
+  width: 30rem;
+  height: 30rem;
   display: grid;
   justify-content: center;
   align-content: center;
@@ -140,29 +141,52 @@ body {
 .winning-message.show {
   display: flex;
 }
+
+/* ---------------Join Game ------------------------- */
 .join-game {
-  background-color: rgb(226, 191, 179, 0.9);
+  display: flex;
+  padding: 1rem 0;
+  gap: 25px;
   justify-content: center;
   align-items: center;
   text-align: center;
   color: #feece2;
   font-size: 3rem;
-  flex-direction: column;
+  flex-direction: row;
+}
+
+#gameIdInput {
+  font-size: 1.4rem;
+  background-color: #f7ded0;
+  border: 0px;
+  color: #000000;
+  border-radius: 25px;
+  padding: 0.55em 0.9em;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#gameIdInput:focus {
+    outline: none;
+}
+
+#gameIdInput:hover {
+  background-color: rgb(255, 200, 169);
 }
 
 .join-game button {
-  margin-top: 3rem;
-  font-size: 3rem;
-  background-color: rgb(255, 190, 152);
-  color: #feece2;
-  border: 0px;
+  font-size: 1.4rem;
+  background-color: #f7ded0;
+  color: #000000;
+  border: 1px;
+  border-radius: 25px;
   padding: 0.55em 0.9em;
   cursor: pointer;
   transition: 0.2s;
 }
 
 .join-game button:hover {
-  background-color: rgb(255, 190, 152);
-  color: #000000;
+  background-color: rgb(255, 200, 169);
+  color: #feece2;
   border-color: white;
 }
