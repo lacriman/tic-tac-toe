@@ -40,6 +40,7 @@ func CreateGameHandler(w http.ResponseWriter, r *http.Request) {
 		ID:            id,
 		Board:         newGame.Board,
 		CurrentPlayer: newGame.CurrentPlayer,
+		Status:        newGame.Status,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -62,6 +63,8 @@ func GetGameHandler(w http.ResponseWriter, r *http.Request) {
 		ID:            id,
 		Board:         gameInstance.Board,
 		CurrentPlayer: gameInstance.CurrentPlayer,
+		Status:        gameInstance.Status,
+		LastUpdated:   gameInstance.LastUpdated,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -94,12 +97,20 @@ func MakeMoveHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	status, winner := gameInstance.GetStatusAndWinner()
+	if status == "won" {
+		gameInstance.Status = "win"
+	} else if status == "draw" {
+		gameInstance.Status = "draw"
+	} else {
+		gameInstance.Status = "in_progress"
+	}
 	response := CreateGameResponse{
 		ID:            id,
 		Board:         gameInstance.Board,
 		CurrentPlayer: gameInstance.CurrentPlayer,
-		Status:        status,
+		Status:        gameInstance.Status,
 		Winner:        winner,
+		LastUpdated:   gameInstance.LastUpdated,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -129,14 +140,18 @@ func JoinGameHandler(w http.ResponseWriter, r *http.Request) {
 	symbol := "X"
 	if len(currentGame.Players) == 1 {
 		symbol = "O"
-
+		currentGame.Status = "ready"
 	}
 
 	player := game.PlayerInfo{Name: name, Symbol: symbol}
 	currentGame.Players = append(currentGame.Players, player)
+	currentGame.LastUpdated = time.Now()
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{
-		"message": "Player joined successfully",
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"message":  "Player joined successfully",
+		"symbol":   symbol,
+		"status":   currentGame.Status,
+		"yourName": name,
 	})
 }

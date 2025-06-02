@@ -2,6 +2,7 @@ package game
 
 import (
 	"fmt"
+	"time"
 )
 
 type Game struct {
@@ -13,6 +14,7 @@ type Game struct {
 	Coords        [2]int
 	Players       []PlayerInfo
 	Status        string
+	LastUpdated   time.Time
 }
 
 type PlayerInfo struct {
@@ -29,6 +31,8 @@ func NewGame() *Game {
 		Moves:         0,
 		Coords:        [2]int{0, 0},
 		Players:       []PlayerInfo{},
+		Status:        "waiting",
+		LastUpdated:   time.Time{},
 	}
 }
 
@@ -131,6 +135,7 @@ func (g *Game) MakeMove(row, col int) error {
 	}
 
 	g.Board[row][col] = g.CurrentPlayer
+	g.LastUpdated = time.Now()
 	g.IncMoves()
 	g.CheckForWin()
 
@@ -143,6 +148,10 @@ func (g *Game) MakeMove(row, col int) error {
 		g.Won = true
 		// g.Winner stays empty for a draw
 		return nil
+	}
+
+	if g.Status == "ready" {
+		g.Status = "in_progress"
 	}
 
 	g.NextPlayer()
