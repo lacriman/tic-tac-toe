@@ -13,6 +13,16 @@ const winningMessageTextElement = document.querySelector(
 
 let currentGameId = null;
 
+(async () => {
+  const response = await fetch("/api/game", {
+    method: "POST",
+  });
+  const data = await response.json();
+  currentGameId = data.id;
+  startGame();
+})();
+
+/* --------------- Popup ------------------------- */
 const popup = new Popup({
   id: "username-popup",
   title: "Welcome to Tic Tac Toe",
@@ -26,14 +36,14 @@ const popup = new Popup({
   overlay: true,
 });
 
-(async () => {
-  const response = await fetch("/api/game", {
-    method: "POST",
-  });
-  const data = await response.json();
-  currentGameId = data.id;
-  startGame();
-})();
+document.addEventListener("DOMContentLoaded", () => {
+  setTimeout(() => {
+    const submitNameBtn = document.getElementById("submitNameBtn");
+    submitNameBtn.addEventListener("click", () => {
+      document.getElementsByClassName("popup")[0].style.display="none";
+    });
+  },100);
+});
 
 /* --------------- Join Game ------------------------- */
 
