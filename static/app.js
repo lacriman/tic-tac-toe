@@ -1,6 +1,9 @@
 const X_CLASS = "x";
 const O_CLASS = "o";
 
+const gameInfo = document.getElementById("gameInfo");
+const joinButton = document.getElementById("joinButton");
+
 const boardElement = document.getElementById("board");
 const winningMessageElement = document.getElementById("winningMessage");
 const restartButton = document.getElementById("restartButton");
@@ -19,6 +22,26 @@ let currentGameId = null;
   startGame();
 })();
 
+/* --------------- Join Game ------------------------- */
+
+joinButton.addEventListener("click", async () => {
+  const gameId = document.getElementById("gameIdInput").value;
+  const response = await fetch(`/join/${gameId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    window.location.href = `/game${gameId}`;
+  } else {
+    const error = await response.text();
+    gameInfo.textContent = `Error: ${error}`;
+  }
+  
+});
+
+/* --------------- Board ------------------------- */
 function renderBoard(board) {
   boardElement.innerHTML = "";
 
@@ -99,9 +122,9 @@ function endGame(winner) {
 }
 
 restartButton.addEventListener("click", async () => {
-  const res = await fetch("/api/game", {method: "POST"});
+  const res = await fetch("/api/game", { method: "POST" });
   const data = await res.json();
   currentGameId = data.id;
-  renderBoard(data.board)
+  renderBoard(data.board);
   winningMessageElement.classList.remove("show");
 });
