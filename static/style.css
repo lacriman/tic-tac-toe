@@ -44,6 +44,18 @@ body {
   flex-direction: row;
 }
 
+#gameInfo {
+  width: 100%;
+  margin-bottom: 25px;
+  font-size: 2.2rem;
+  background-color: #f7ded0;
+  border: 0px;
+  color: #000000;
+  border-radius: 25px;
+  padding: 0.55em 0.9em;
+  text-align: center;
+}
+
 #gameIdInput {
   width: 70%;
   font-size: 2.2rem;
@@ -63,7 +75,6 @@ body {
 #gameIdInput:focus {
   outline: none;
 }
-
 
 .join-game button {
   width: 30%;
