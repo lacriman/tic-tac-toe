@@ -109,7 +109,7 @@ func MakeMoveHandler(w http.ResponseWriter, r *http.Request) {
 		ID:            id,
 		Board:         gameInstance.Board,
 		CurrentPlayer: gameInstance.CurrentPlayer,
-		Status:        gameInstance.Status,
+		Status:        status,
 		Winner:        winner,
 		LastUpdated:   gameInstance.LastUpdated,
 	}
