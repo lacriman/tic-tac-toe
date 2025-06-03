@@ -40,12 +40,9 @@ if (!storedName) {
 }
 
 /* --------------- Popup ------------------------- */
-
 document.addEventListener("DOMContentLoaded", () => {
-  setTimeout(() => {
-    const submitNameBtn = document.getElementById("submitNameBtn");
-
-    submitNameBtn.addEventListener("click", () => {
+  document.body.addEventListener("click", (event) => {
+    if (event.target && event.target.id === "submitNameBtn") {
       const username = document.getElementById("usernameInput").value.trim();
       if (!username) {
         document.getElementById("usernameLabel").textContent =
@@ -54,9 +51,10 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("username", username);
         document.getElementsByClassName("popup")[0].style.display = "none";
       }
-    });
-  }, 100);
+    }
+  });
 });
+
 
 /* --------------- Join Game ------------------------- */
 
