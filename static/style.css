@@ -5,7 +5,7 @@
 }
 
 :root {
-  --cell-size: 120px;
+  --cell-size: 300px;
   --mark-size: calc(var(--cell-size) * 0.9);
 
   --color: #f7ded0;
@@ -18,12 +18,74 @@
 body {
   margin: 0;
   background: var(--bg-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* --------------- Join Game ------------------------- */
+.join-game {
+  display: flex;
+  width: 900px;
+  justify-content: space-between;
+  gap: 25px;
+  align-items: center;
+  text-align: center;
+  color: #feece2;
+  font-size: 3rem;
+  flex-direction: row;
+}
+
+#gameIdInput {
+  width: 70%;
+  font-size: 2.2rem;
+  background-color: #f7ded0;
+  border: 0px;
+  color: #000000;
+  border-radius: 25px;
+  padding: 0.55em 0.9em;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#gameIdInput::placeholder {
+  color: #000000;
+}
+
+#gameIdInput:focus {
+  outline: none;
+}
+
+
+.join-game button {
+  width: 30%;
+  font-size: 2.1rem;
+  background-color: #f7ded0;
+  color: #000000;
+  border: none;
+  border-radius: 25px;
+  padding: 0.55em 0.9em;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.join-game button:hover {
+  background-color: rgb(255, 200, 169);
+  color: #feece2;
+  border-color: white;
+}
+
+/* --------------- Board ------------------------- */
 .board {
-  margin: 0 auto;
-  width: 30rem;
-  height: 30rem;
+  margin: 2.2rem auto;
   display: grid;
   justify-content: center;
   align-content: center;
@@ -34,7 +96,7 @@ body {
 .cell {
   width: var(--cell-size);
   height: var(--cell-size);
-  border: 2px solid var(--border-color);
+  border: 5px solid var(--border-color);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -113,7 +175,7 @@ body {
   align-items: center;
   text-align: center;
   color: #feece2;
-  font-size: 3rem;
+  font-size: 6rem;
   flex-direction: column;
 }
 
@@ -122,8 +184,8 @@ body {
 }
 
 .winning-message button {
-  margin-top: 3rem;
-  font-size: 3rem;
+  margin-top: 4rem;
+  font-size: 5rem;
   background-color: rgb(255, 190, 152);
   color: #feece2;
   border: 0px;
@@ -140,53 +202,4 @@ body {
 
 .winning-message.show {
   display: flex;
-}
-
-/* ---------------Join Game ------------------------- */
-.join-game {
-  display: flex;
-  padding: 1rem 0;
-  gap: 25px;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  color: #feece2;
-  font-size: 3rem;
-  flex-direction: row;
-}
-
-#gameIdInput {
-  font-size: 1.4rem;
-  background-color: #f7ded0;
-  border: 0px;
-  color: #000000;
-  border-radius: 25px;
-  padding: 0.55em 0.9em;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-#gameIdInput:focus {
-    outline: none;
-}
-
-#gameIdInput:hover {
-  background-color: rgb(255, 200, 169);
-}
-
-.join-game button {
-  font-size: 1.4rem;
-  background-color: #f7ded0;
-  color: #000000;
-  border: 1px;
-  border-radius: 25px;
-  padding: 0.55em 0.9em;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.join-game button:hover {
-  background-color: rgb(255, 200, 169);
-  color: #feece2;
-  border-color: white;
 }
