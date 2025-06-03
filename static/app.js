@@ -22,27 +22,40 @@ let currentGameId = null;
   startGame();
 })();
 
-/* --------------- Popup ------------------------- */
-const popup = new Popup({
-  id: "username-popup",
-  title: "Welcome to Tic Tac Toe",
-  content: `
-    <label for="username">Please enter your name:</label><br>
+const storedName = localStorage.getItem("username");
+if (!storedName) {
+  const popup = new Popup({
+    id: "username-popup",
+    title: "Welcome to Tic Tac Toe",
+    content: `
+    <label id="usernameLabel" for="username">Please enter your name:</label><br>
     <input type="text" id="usernameInput" placeholder="Your name" /><br><br>
     <button id="submitNameBtn">Submit</button>      
   `,
-  showImmediately: true,
-  closeButton: false,
-  overlay: true,
-});
+    showImmediately: true,
+    closeButton: false,
+    overlay: true,
+  });
+} else {
+}
+
+/* --------------- Popup ------------------------- */
 
 document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
     const submitNameBtn = document.getElementById("submitNameBtn");
+
     submitNameBtn.addEventListener("click", () => {
-      document.getElementsByClassName("popup")[0].style.display="none";
+      const username = document.getElementById("usernameInput").value.trim();
+      if (!username) {
+        document.getElementById("usernameLabel").textContent =
+          "You have to write your username 👇";
+      } else {
+        localStorage.setItem("username", username);
+        document.getElementsByClassName("popup")[0].style.display = "none";
+      }
     });
-  },100);
+  }, 100);
 });
 
 /* --------------- Join Game ------------------------- */
