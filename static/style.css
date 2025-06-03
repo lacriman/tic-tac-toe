@@ -31,6 +31,66 @@ body {
   height: 100vh;
 }
 
+/* --------------- Popup ------------------------- */
+.popup-close {
+  display: none;
+}
+
+.popup-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  color: #feece2;
+  font-size: 3rem;
+  flex-direction: column;
+}
+
+.popup-body label {
+  width: 100%;
+  margin-bottom: 25px;
+  font-size: 2.2rem;
+  border: 0px;
+  color: #000000;
+  border-radius: 25px;
+  padding: 0.55em 0.9em;
+  text-align: center;
+}
+
+.popup-body input {
+  width: 70%;
+  font-size: 2.2rem;
+  border: 7px solid #f7ded0;
+  color: #000000;
+  border-radius: 25px;
+  padding: 0.55em 0.9em;
+  cursor: pointer;
+  transition: 0.2s;
+  outline: none;
+  transition: 0.3s;
+}
+
+.popup-body input:hover {
+  border-color: #ffc8a9;
+}
+
+.popup-body button {
+  font-size: 2.1rem;
+  background-color: #f7ded0;
+  color: #000000;
+  border: none;
+  border-radius: 25px;
+  padding: 0.55em 0.9em;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.popup-body button:hover {
+  background-color: #ffc8a9;
+  color: #ffffff;
+  border-color: white;
+}
+
 /* --------------- Join Game ------------------------- */
 .join-game {
   display: flex;
@@ -60,20 +120,21 @@ body {
   width: 70%;
   font-size: 2.2rem;
   background-color: #f7ded0;
-  border: 0px;
+  border: 5px solid #ffbe98;
   color: #000000;
   border-radius: 25px;
   padding: 0.55em 0.9em;
   cursor: pointer;
-  transition: 0.2s;
+  transition: 0.3s;
+  outline: none;
+}
+
+#gameIdInput:hover {
+  border-color: #ffc8a9;
 }
 
 #gameIdInput::placeholder {
   color: #000000;
-}
-
-#gameIdInput:focus {
-  outline: none;
 }
 
 .join-game button {
@@ -89,7 +150,7 @@ body {
 }
 
 .join-game button:hover {
-  background-color: rgb(255, 200, 169);
+  background-color: #ffc8a9;
   color: #feece2;
   border-color: white;
 }

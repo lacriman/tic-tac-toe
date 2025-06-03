@@ -13,6 +13,19 @@ const winningMessageTextElement = document.querySelector(
 
 let currentGameId = null;
 
+const popup = new Popup({
+  id: "username-popup",
+  title: "Welcome to Tic Tac Toe",
+  content: `
+    <label for="username">Please enter your name:</label><br>
+    <input type="text" id="usernameInput" placeholder="Your name" /><br><br>
+    <button id="submitNameBtn">Submit</button>      
+  `,
+  showImmediately: true,
+  closeButton: false,
+  overlay: true,
+});
+
 (async () => {
   const response = await fetch("/api/game", {
     method: "POST",
@@ -38,7 +51,6 @@ joinButton.addEventListener("click", async () => {
     const error = await response.text();
     gameInfo.textContent = `Error: ${error}`;
   }
-  
 });
 
 /* --------------- Board ------------------------- */
