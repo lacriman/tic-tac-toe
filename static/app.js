@@ -22,7 +22,6 @@ let currentGameId = null;
   startGame();
 })();
 
-const storedName = localStorage.getItem("username");
 if (!storedName) {
   const popup = new Popup({
     id: "username-popup",
@@ -49,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
           "You have to write your username 👇";
       } else {
         try {
-          const response = await fetch("/api/game/set-username", {
+          const response = await fetch("/api/session", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -60,7 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
             throw new Error("Request failed");
           }
 
-          localStorage.setItem("username", username);
           document.getElementsByClassName("popup")[0].style.display = "none";
         } catch (err) {}
       }
@@ -73,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
 joinButton.addEventListener("click", async () => {
   const storedName = localStorage.getItem("username");
   const gameId = document.getElementById("gameIdInput").value;
-  
+
   const response = await fetch(`/api/game/${gameId}/join`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5"
-	// Universally Unique Identifier
 	"github.com/google/uuid"
 	"github.com/lacriman/tic-tac-toe/game"
 )
@@ -28,9 +27,8 @@ type MoveRequest struct {
 	Col    int    `json:"col"`
 }
 
-func SetUserNameHandler(w http.ResponseWriter, r *http.Request)  {
-	
-}
+// func SetUserNameHandler(w http.ResponseWriter, r *http.Request)  {
+// }
 
 func CreateGameHandler(w http.ResponseWriter, r *http.Request) {
 	id := uuid.New().String()
@@ -45,7 +43,7 @@ func CreateGameHandler(w http.ResponseWriter, r *http.Request) {
 		Board:         newGame.Board,
 		CurrentPlayer: newGame.CurrentPlayer,
 		Status:        newGame.Status,
-		LastUpdated: newGame.LastUpdated,
+		LastUpdated:   newGame.LastUpdated,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
