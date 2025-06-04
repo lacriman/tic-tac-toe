@@ -41,33 +41,47 @@ if (!storedName) {
 
 /* --------------- Popup ------------------------- */
 document.addEventListener("DOMContentLoaded", () => {
-  document.body.addEventListener("click", (event) => {
+  document.body.addEventListener("click", async (event) => {
     if (event.target && event.target.id === "submitNameBtn") {
       const username = document.getElementById("usernameInput").value.trim();
       if (!username) {
         document.getElementById("usernameLabel").textContent =
           "You have to write your username 👇";
       } else {
-        localStorage.setItem("username", username);
-        document.getElementsByClassName("popup")[0].style.display = "none";
+        try {
+          const response = await fetch("/api/game/set-username", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name: username }),
+          });
+          if (!response.ok) {
+            throw new Error("Request failed");
+          }
+
+          localStorage.setItem("username", username);
+          document.getElementsByClassName("popup")[0].style.display = "none";
+        } catch (err) {}
       }
     }
   });
 });
 
-
 /* --------------- Join Game ------------------------- */
 
 joinButton.addEventListener("click", async () => {
+  const storedName = localStorage.getItem("username");
   const gameId = document.getElementById("gameIdInput").value;
-  const response = await fetch(`/join/${gameId}`, {
+  
+  const response = await fetch(`/api/game/${gameId}/join`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
   });
 
   if (response.ok) {
     const data = await response.json();
-    window.location.href = `/game${gameId}`;
+    window.location.href = `/game/${gameId}`;
   } else {
     const error = await response.text();
     gameInfo.textContent = `Error: ${error}`;

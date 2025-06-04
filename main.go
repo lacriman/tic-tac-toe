@@ -22,9 +22,10 @@ func main() {
 
 	r.Route("/api/game", func(r chi.Router) {
 		r.Post("/", handlers.CreateGameHandler)
+		r.Post("/set-username", handlers.SetUserNameHandler)
 		r.Get("/{id}", handlers.GetGameHandler)
-		r.Post("/{id}/move", handlers.MakeMoveHandler)
 		r.Post("/{id}/join", handlers.JoinGameHandler)
+		r.Post("/{id}/move", handlers.MakeMoveHandler)
 	})
 
 	fs := http.FileServer(http.Dir("./static/"))
