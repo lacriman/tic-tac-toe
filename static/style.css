@@ -78,27 +78,9 @@ body {
   border-color: #ffc8a9;
 }
 
-.popup-body button {
-  font-size: 2.1rem;
-  background-color: #f7ded0;
-  color: #000000;
-  border: none;
-  border-radius: 25px;
-  padding: 0.55em 0.9em;
-  cursor: pointer;
-  transition: 0.2s;
-  font-weight: bold;
-  font-family: "Roboto", sans-serif;
-}
-
-.popup-body button:hover {
-  background-color: #ffc8a9;
-  color: #ffffff;
-  border-color: white;
-}
-
 /* --------------- Join Game ------------------------- */
-.join-game {
+.join-game,
+.info-copy {
   display: flex;
   width: 900px;
   justify-content: space-between;
@@ -106,14 +88,13 @@ body {
   align-items: center;
   text-align: center;
   color: #feece2;
-  font-size: 3rem;
+  font-size: 2.2rem;
   flex-direction: row;
+  margin-bottom: 25px;
 }
 
 #gameInfo {
   width: 100%;
-  margin-bottom: 25px;
-  font-size: 2.2rem;
   background-color: #f7ded0;
   border: 0px;
   color: #000000;
@@ -143,9 +124,9 @@ body {
   color: #000000;
 }
 
-.join-game button {
-  width: 30%;
+.button {
   font-size: 2.1rem;
+  width: 30%;
   background-color: #f7ded0;
   color: #000000;
   border: none;
@@ -156,7 +137,7 @@ body {
   transition: 0.2s;
 }
 
-.join-game button:hover {
+.button:hover {
   background-color: #ffc8a9;
   color: #feece2;
   border-color: white;
@@ -262,18 +243,19 @@ body {
   color: #feece2;
 }
 
-.winning-message button {
-  margin-top: 4rem;
-  font-size: 5rem;
+#submitNameBtn {
+  font-size: 2.1rem;
   background-color: rgb(255, 190, 152);
   color: #feece2;
-  border: 0px;
+  border: none;
+  border-radius: 25px;
   padding: 0.55em 0.9em;
   cursor: pointer;
+
   transition: 0.2s;
 }
 
-.winning-message button:hover {
+#submitNameBtn :hover {
   background-color: rgb(255, 190, 152);
   color: #000000;
   border-color: white;
