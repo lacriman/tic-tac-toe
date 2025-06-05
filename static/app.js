@@ -41,6 +41,7 @@ async function init() {
 
 init();
 
+/* --------------- Popup ------------------------- */
 function showUsernamePopup() {
   const popup = new Popup({
     id: "username-popup",
@@ -56,7 +57,6 @@ function showUsernamePopup() {
   });
 }
 
-/* --------------- Popup ------------------------- */
 document.addEventListener("DOMContentLoaded", () => {
   document.body.addEventListener("click", async (event) => {
     if (event.target && event.target.id === "submitNameBtn") {
@@ -85,7 +85,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* --------------- Join Game ------------------------- */
-
 async function joinGame(gameId, username) {
   try {
     const response = await fetch(
@@ -110,6 +109,32 @@ async function joinGame(gameId, username) {
   }
 }
 
+/* --------------- Join Button ------------------------- */
+joinButton.addEventListener("click", async () => {
+  const gameId = document.getElementById("gameIdInput").value.trim();
+  if (!gameId) {
+    gameInfo.textContent = "Please enter a game ID";
+    return;
+  }
+
+  try {
+    const sessionRes = await fetch(`/api/session`);
+    const sessionData = sessionRes.ok ? await sessionRes.json() : null;
+
+    if (!sessionData) {
+      gameInfo.textContent = "Please set your username first";
+      setTimeout(() => {
+        showUsernamePopup();
+      }, 550);
+      return;
+    }
+
+    await joinGame(gameId, sessionData.name);
+  } catch (err) {
+    gameInfo.textContent = `Error: ${err.message}`;
+  }
+});
+
 /* --------------- Polling ------------------------- */
 function startPolling() {
   setInterval(async () => {
@@ -117,7 +142,7 @@ function startPolling() {
 
     try {
       const res = await fetch(`/api/game/${currentGameId}`);
-      const data= await res.json();
+      const data = await res.json();
 
       renderBoard(data.board);
 
@@ -127,7 +152,7 @@ function startPolling() {
     } catch (err) {
       console.error("Polling error: ", err);
     }
-  }, 1000)
+  }, 1000);
 }
 
 /* --------------- Board ------------------------- */
