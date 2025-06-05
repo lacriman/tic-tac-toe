@@ -14,29 +14,25 @@ const winningMessageTextElement = document.querySelector(
 let currentGameId = null;
 
 async function init() {
-  try {
-    // check session
-    const sessionRes = await fetch("/api/session");
-    const sessionData = sessionRes.ok ? await sessionRes.json() : null;
+  // check session
+  const sessionRes = await fetch("/api/session");
+  const sessionData = sessionRes.ok ? await sessionRes.json() : null;
 
-    if (!sessionData) {
-      showUsernamePopup();
-      return;
-    }
-
-    const urlParams = new URLSearchParams(window.location.search); // returns "?gameId=abc123" https://localhost:3000/?gameId=abc123
-    const joinGameId = urlParams.get("gameId"); // returns "abc123"
-
-    // create new game
-    const gameRes = await fetch("/api/game", { method: "POST" });
-    const gameData = await gameRes.json();
-    currentGameId = gameData.id;
-
-    // start game
-    startGame();
-  } catch (err) {
-    console.error("Initialization failed:", err.message);
+  if (!sessionData) {
+    showUsernamePopup();
+    return;
   }
+
+  const urlParams = new URLSearchParams(window.location.search); // returns "?gameId=abc123" https://localhost:3000/?gameId=abc123
+  const joinGameId = urlParams.get("gameId"); // returns "abc123"
+
+  // create new game
+  const gameRes = await fetch("/api/game", { method: "POST" });
+  const gameData = await gameRes.json();
+  currentGameId = gameData.id;
+
+  // start game
+  startGame();
 }
 
 init();
