@@ -13,16 +13,32 @@ const winningMessageTextElement = document.querySelector(
 
 let currentGameId = null;
 
-(async () => {
-  const response = await fetch("/api/game", {
-    method: "POST",
-  });
-  const data = await response.json();
-  currentGameId = data.id;
-  startGame();
-})();
+async function init() {
+  try {
+    // check session
+    const sessionRes = await fetch("/api/session");
+    const sessionData = sessionRes.ok ? await sessionRes.json() : null;
 
-if (!storedName) {
+    if (!sessionData) {
+      showUsernamePopup();
+      return;
+    }
+
+    // create new game
+    const gameRes = await fetch("/api/game", { method: "POST" });
+    const gameData = await gameRes.json();
+    currentGameId = gameData.id;
+
+    // start game
+    startGame();
+  } catch (err) {
+    console.error("Initialization failed:", err.message);
+  }
+}
+
+init();
+
+function showUsernamePopup() {
   const popup = new Popup({
     id: "username-popup",
     title: "Welcome to Tic Tac Toe",
@@ -35,7 +51,6 @@ if (!storedName) {
     closeButton: false,
     overlay: true,
   });
-} else {
 }
 
 /* --------------- Popup ------------------------- */
