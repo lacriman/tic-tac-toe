@@ -80,6 +80,12 @@ func MakeMoveHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	username, exist := sessionStore[cookie.Value]
+	if !exist {
+		http.Error(w, "unauthorized", http.StatusUnauthorized)
+		return
+	}
+
 	var move MoveRequest
 	if err := json.NewDecoder(r.Body).Decode(&move); err != nil {
 		http.Error(w, "Invalid input", http.StatusBadRequest)
@@ -95,20 +101,33 @@ func MakeMoveHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := gameInstance.MakeMove(move.Row, move.Col)
+	var playerSymbol string
+	var isPlayer bool
+	for _, p := range gameInstance.Players {
+		if p.Name == username {
+			playerSymbol = p.Symbol
+			isPlayer = true
+			break
+		}
+	}
+
+	if !isPlayer {
+		http.Error(w, "Game not found", http.StatusBadRequest)
+		return
+	}
+
+	if playerSymbol != gameInstance.CurrentPlayer {
+		http.Error(w, "Game not found", http.StatusBadRequest)
+		return
+	}
+
+	err = gameInstance.MakeMove(move.Row, move.Col)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	status, winner := gameInstance.GetStatusAndWinner()
-	if status == "won" {
-		gameInstance.Status = "win"
-	} else if status == "draw" {
-		gameInstance.Status = "draw"
-	} else {
-		gameInstance.Status = "in_progress"
-	}
 	response := CreateGameResponse{
 		ID:            id,
 		Board:         gameInstance.Board,
@@ -116,6 +135,7 @@ func MakeMoveHandler(w http.ResponseWriter, r *http.Request) {
 		Status:        status,
 		Winner:        winner,
 		LastUpdated:   gameInstance.LastUpdated,
+		Players:       gameInstance.Players,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -130,6 +150,9 @@ func JoinGameHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "name required", http.StatusBadRequest)
 		return
 	}
+
+	gameMux.Lock()
+	defer gameMux.Unlock()
 
 	currentGame, ok := games[gameID]
 	if !ok {
