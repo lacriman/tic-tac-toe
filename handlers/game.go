@@ -74,6 +74,12 @@ func GetGameHandler(w http.ResponseWriter, r *http.Request) {
 func MakeMoveHandler(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
+	cookie, err := r.Cookie("session_id")
+	if err != nil {
+		http.Error(w, "unauthorized", http.StatusUnauthorized)
+		return
+	}
+
 	var move MoveRequest
 	if err := json.NewDecoder(r.Body).Decode(&move); err != nil {
 		http.Error(w, "Invalid input", http.StatusBadRequest)
@@ -81,16 +87,15 @@ func MakeMoveHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	gameMux.Lock()
+	defer gameMux.Unlock()
+
 	gameInstance, exists := games[id]
 	if !exists {
-		gameMux.Unlock()
 		http.Error(w, "Game not found", http.StatusNotFound)
 		return
 	}
 
 	err := gameInstance.MakeMove(move.Row, move.Col)
-	gameMux.Unlock()
-
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return

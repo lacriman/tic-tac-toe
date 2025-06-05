@@ -16,13 +16,16 @@ let currentGameId = null;
 async function init() {
   try {
     // check session
-    const sessionRes = await fetch("/api/session"); 
+    const sessionRes = await fetch("/api/session");
     const sessionData = sessionRes.ok ? await sessionRes.json() : null;
 
     if (!sessionData) {
       showUsernamePopup();
       return;
     }
+
+    const urlParams = new URLSearchParams(window.location.search); // returns "?gameId=abc123" https://localhost:3000/?gameId=abc123
+    const joinGameId = urlParams.get("gameId"); // returns "abc123"
 
     // create new game
     const gameRes = await fetch("/api/game", { method: "POST" });
@@ -83,23 +86,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /* --------------- Join Game ------------------------- */
 
-joinButton.addEventListener("click", async () => {
-  const storedName = localStorage.getItem("username");
-  const gameId = document.getElementById("gameIdInput").value;
+async function joinGame(gameId, username) {
+  try {
+    const response = await fetch(`/api/game/${gameId}/join`, {
+      method: "POST",
+    });
 
-  const response = await fetch(`/api/game/${gameId}/join`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-  });
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
 
-  if (response.ok) {
     const data = await response.json();
-    window.location.href = `/game/${gameId}`;
-  } else {
-    const error = await response.text();
-    gameInfo.textContent = `Error: ${error}`;
+    currentGameId = gameId
+    gameInfo.textContent = `${username} game as ${data.symbol}`;
+
+    startPolling();
+  } catch (err) {
+    gameInfo.textContent = `Error: ${err.message}`;
+    console.error("Join failed: ", err.message);
   }
-});
+}
 
 /* --------------- Board ------------------------- */
 function renderBoard(board) {
