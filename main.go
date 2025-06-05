@@ -20,6 +20,7 @@ func main() {
 	})
 
 	r.Post("/api/session", handlers.SetUsernameHandler)
+	r.Get("/api/session", handlers.GetSessionHandler)
 
 	r.Route("/api/game", func(r chi.Router) {
 		r.Post("/", handlers.CreateGameHandler)

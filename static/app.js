@@ -16,7 +16,7 @@ let currentGameId = null;
 async function init() {
   try {
     // check session
-    const sessionRes = await fetch("/api/session");
+    const sessionRes = await fetch("/api/session"); 
     const sessionData = sessionRes.ok ? await sessionRes.json() : null;
 
     if (!sessionData) {

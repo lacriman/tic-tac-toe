@@ -27,9 +27,6 @@ type MoveRequest struct {
 	Col    int    `json:"col"`
 }
 
-// func SetUserNameHandler(w http.ResponseWriter, r *http.Request)  {
-// }
-
 func CreateGameHandler(w http.ResponseWriter, r *http.Request) {
 	id := uuid.New().String()
 	newGame := game.NewGame()
