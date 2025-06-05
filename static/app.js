@@ -88,16 +88,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function joinGame(gameId, username) {
   try {
-    const response = await fetch(`/api/game/${gameId}/join`, {
-      method: "POST",
-    });
+    const response = await fetch(
+      `/api/game/${gameId}/join?name=${encodeURIComponent(username)}`, //encodeURIComponent("John Doe") => "John%20Doe"
+      {
+        method: "POST",
+      }
+    );
 
     if (!response.ok) {
       throw new Error(await response.text());
     }
 
     const data = await response.json();
-    currentGameId = gameId
+    currentGameId = gameId;
     gameInfo.textContent = `${username} game as ${data.symbol}`;
 
     startPolling();
@@ -105,6 +108,26 @@ async function joinGame(gameId, username) {
     gameInfo.textContent = `Error: ${err.message}`;
     console.error("Join failed: ", err.message);
   }
+}
+
+/* --------------- Polling ------------------------- */
+function startPolling() {
+  setInterval(async () => {
+    if (!currentGameId) return;
+
+    try {
+      const res = await fetch(`/api/game/${currentGameId}`);
+      const data= await res.json();
+
+      renderBoard(data.board);
+
+      if (data.status === "won" || data.status === "draw") {
+        endGame(data.winner);
+      }
+    } catch (err) {
+      console.error("Polling error: ", err);
+    }
+  }, 1000)
 }
 
 /* --------------- Board ------------------------- */
