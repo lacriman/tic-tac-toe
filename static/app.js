@@ -110,6 +110,21 @@ async function joinGame(gameId, username) {
 /* --------------- Copy Button ------------------------- */
 copyButton.addEventListener("click", async () => {
   try {
+    const sessionRes = await fetch(`/api/session`);
+    const sessionData = sessionRes.ok ? await sessionRes.json() : null;
+
+    if (!sessionData) {
+      gameInfo.textContent = "Please set your username first";
+      setTimeout(() => {
+        showUsernamePopup();
+      }, 50);
+      return;
+    }
+  } catch (err) {
+    gameInfo.textContent = `Error: ${err.message}`;
+  }
+
+  try {
     const res = await fetch(`/api/game/${currentGameId}`);
     const joinGameId = res.url.split("/game/", 2);
     const startGameId = joinGameId[1];
