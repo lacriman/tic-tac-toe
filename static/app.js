@@ -7,6 +7,8 @@ const joinButton = document.getElementById("joinButton");
 const boardElement = document.getElementById("board");
 const winningMessageElement = document.getElementById("winningMessage");
 const restartButton = document.getElementById("restartButton");
+const copyButton = document.getElementById("copyButton");
+
 const winningMessageTextElement = document.querySelector(
   "[data-winning-message-text]"
 );
@@ -100,10 +102,29 @@ async function joinGame(gameId, username) {
 
     startPolling();
   } catch (err) {
-    gameInfo.textContent = `Error: ${err.message}`;
+    gameInfo.textContent = `Join failed: ${err.message}`;
     console.error("Join failed: ", err.message);
   }
 }
+
+/* --------------- Copy Button ------------------------- */
+copyButton.addEventListener("click", async () => {
+  try {
+    const res = await fetch(`/api/game/${currentGameId}`);
+    const joinGameId = res.url.split("/game/", 2);
+    const startGameId = joinGameId[1];
+
+    const type = "text/plain";
+    const clipboardItemData = {
+      [type]: startGameId,
+    };
+    const clipboardItem = new ClipboardItem(clipboardItemData);
+    await navigator.clipboard.write([clipboardItem]);
+  } catch (err) {
+    gameInfo.textContent = `Copy failed: ${err.message}`;
+    console.error("Copy failed: ", err.message);
+  }
+});
 
 /* --------------- Join Button ------------------------- */
 joinButton.addEventListener("click", async () => {
