@@ -28,13 +28,15 @@ async function init() {
   const urlParams = new URLSearchParams(window.location.search); // returns "?gameId=abc123" https://localhost:3000/?gameId=abc123
   const joinGameId = urlParams.get("gameId"); // returns "abc123"
 
-  // create new game
-  const gameRes = await fetch("/api/game", { method: "POST" });
-  const gameData = await gameRes.json();
-  currentGameId = gameData.id;
-
-  // start game
-  startGame();
+  if (joinGameId) {
+    await joinGame(joinGameId, sessionData.name);
+  } else {
+    const gameRes = await fetch("/api/game", { method: "POST" });
+    const gameData = await gameRes.json();
+    currentGameId = gameData.id;
+    gameInfo.textContent = `${sessionData.name} created game as X`; // Optional UX
+    startGame();
+  }
 }
 
 init();
@@ -98,7 +100,7 @@ async function joinGame(gameId, username) {
 
     const data = await response.json();
     currentGameId = gameId;
-    gameInfo.textContent = `${username} game as ${data.symbol}`;
+    gameInfo.textContent = `${username} enters this game as ${data.symbol}`;
 
     startPolling();
   } catch (err) {
@@ -135,6 +137,8 @@ copyButton.addEventListener("click", async () => {
     };
     const clipboardItem = new ClipboardItem(clipboardItemData);
     await navigator.clipboard.write([clipboardItem]);
+
+    gameInfo.textContent = "Game ID Copied"
   } catch (err) {
     gameInfo.textContent = `Copy failed: ${err.message}`;
     console.error("Copy failed: ", err.message);

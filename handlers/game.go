@@ -11,14 +11,14 @@ import (
 )
 
 type CreateGameResponse struct {
-    ID            string          `json:"id"`
-    Board         [3][3]string    `json:"board"`
-    CurrentPlayer string          `json:"currentPlayer"`
-    Status        string          `json:"status"`
-    Winner        string          `json:"winner,omitempty"`
-    LastUpdated   time.Time       `json:"lastUpdated"`
-    Message       string          `json:"message,omitempty"`
-    Players       []game.PlayerInfo `json:"players"`
+	ID            string            `json:"id"`
+	Board         [3][3]string      `json:"board"`
+	CurrentPlayer string            `json:"currentPlayer"`
+	Status        string            `json:"status"`
+	Winner        string            `json:"winner"`
+	LastUpdated   time.Time         `json:"lastUpdated"`
+	Message       string            `json:"message,omitempty"`
+	Players       []game.PlayerInfo `json:"players"`
 }
 
 type MoveRequest struct {
@@ -64,6 +64,7 @@ func GetGameHandler(w http.ResponseWriter, r *http.Request) {
 		Board:         gameInstance.Board,
 		CurrentPlayer: gameInstance.CurrentPlayer,
 		Status:        gameInstance.Status,
+		Winner:        gameInstance.Winner,
 		LastUpdated:   gameInstance.LastUpdated,
 	}
 

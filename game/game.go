@@ -71,6 +71,7 @@ func (g *Game) CheckForWin() {
 	if g.checkVertical() || g.checkHorizontal() || g.checkDiagonal() {
 		g.Winner = g.CurrentPlayer
 		g.Won = true
+		g.Status = "won"
 		return
 	}
 	g.Won = false
