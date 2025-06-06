@@ -243,10 +243,10 @@ body {
   color: #feece2;
 }
 
-#submitNameBtn {
+#submitNameBtn, #restartButton {
   font-size: 2.1rem;
   background-color: rgb(255, 190, 152);
-  color: #feece2;
+  color: #ffffff;
   border: none;
   border-radius: 25px;
   padding: 0.55em 0.9em;
@@ -255,8 +255,8 @@ body {
   transition: 0.2s;
 }
 
-#submitNameBtn :hover {
-  background-color: rgb(255, 190, 152);
+#submitNameBtn:hover, #restartButton:hover {
+  background-color: rgb(255, 203, 173);
   color: #000000;
   border-color: white;
 }
