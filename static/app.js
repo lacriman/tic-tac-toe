@@ -12,17 +12,17 @@ const copyButton = document.getElementById("copyButton");
 const winningMessageTextElement = document.querySelector(
   "[data-winning-message-text]"
 );
-
 let currentGameId = null;
 
 async function init() {
   // check session
-  const sessionRes = await fetch("/api/session");
-  const sessionData = sessionRes.ok ? await sessionRes.json() : null;
+  let sessionRes = await fetch("/api/session");
+  let sessionData = sessionRes.ok ? await sessionRes.json() : null;
 
-  if (!sessionData) {
-    showUsernamePopup();
-    return;
+  while (!sessionData) {
+    await showUsernamePopup();
+     sessionRes = await fetch("/api/session");
+     sessionData = sessionRes.ok ? await sessionRes.json() : null;
   }
 
   const urlParams = new URLSearchParams(window.location.search); // returns "?gameId=abc123" https://localhost:3000/?gameId=abc123
@@ -34,55 +34,58 @@ async function init() {
     const gameRes = await fetch("/api/game", { method: "POST" });
     const gameData = await gameRes.json();
     currentGameId = gameData.id;
-    gameInfo.textContent = `${sessionData.name} created game as X`; // Optional UX
+    gameInfo.textContent = `${sessionData.name} created game as X`;
     startGame();
   }
 }
 
-init();
+ init();
 
 /* --------------- Popup ------------------------- */
-function showUsernamePopup() {
-  const popup = new Popup({
-    id: "username-popup",
-    title: "Welcome to Tic Tac Toe",
-    content: `
-    <label id="usernameLabel" for="username">Please enter your name:</label><br>
-    <input type="text" id="usernameInput" placeholder="Your name" /><br><br>
-    <button id="submitNameBtn">Submit</button>      
-  `,
-    showImmediately: true,
-    closeButton: false,
-    overlay: true,
+async function showUsernamePopup() {
+  return new Promise((resolve) => {
+    const popup = new Popup({
+      id: "username-popup",
+      title: "Welcome to Tic Tac Toe",
+      content: `
+        <label id="usernameLabel" for="username">Please enter your name:</label><br>
+        <input type="text" id="usernameInput" placeholder="Your name" /><br><br>
+        <button id="submitNameBtn">Submit</button>      
+      `,
+      showImmediately: true,
+      closeButton: false,
+      overlay: true,
+    });
+
+    const handler = async (event) => {
+      if (event.target && event.target.id === "submitNameBtn") {
+        const username = document.getElementById("usernameInput").value.trim();
+        if (!username) {
+          document.getElementById("usernameLabel").textContent =
+            "You have to write your username 👇";
+        } else {
+          try {
+            const response = await fetch("/api/session", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ name: username }),
+            });
+            if (!response.ok) throw new Error("Request failed");
+            document.querySelector(".popup").style.display = "none";
+            document.body.removeEventListener("click", handler);
+            resolve(username); // 🟢 Resolve with the username
+          } catch (err) {
+            gameInfo.textContent = `Error: ${err.message}`;
+          }
+        }
+      }
+    };
+
+    document.body.addEventListener("click", handler);
   });
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-  document.body.addEventListener("click", async (event) => {
-    if (event.target && event.target.id === "submitNameBtn") {
-      const username = document.getElementById("usernameInput").value.trim();
-      if (!username) {
-        document.getElementById("usernameLabel").textContent =
-          "You have to write your username 👇";
-      } else {
-        try {
-          const response = await fetch("/api/session", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ name: username }),
-          });
-          if (!response.ok) {
-            throw new Error("Request failed");
-          }
-
-          document.getElementsByClassName("popup")[0].style.display = "none";
-        } catch (err) {}
-      }
-    }
-  });
-});
 
 /* --------------- Join Game ------------------------- */
 async function joinGame(gameId, username) {
@@ -138,7 +141,7 @@ copyButton.addEventListener("click", async () => {
     const clipboardItem = new ClipboardItem(clipboardItemData);
     await navigator.clipboard.write([clipboardItem]);
 
-    gameInfo.textContent = "Game ID Copied"
+    gameInfo.textContent = "Game ID Copied";
   } catch (err) {
     gameInfo.textContent = `Copy failed: ${err.message}`;
     console.error("Copy failed: ", err.message);
