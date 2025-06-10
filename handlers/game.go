@@ -27,6 +27,7 @@ type MoveRequest struct {
 	Col    int    `json:"col"`
 }
 
+// ------- Create Game ------------------------------------------------------
 func CreateGameHandler(w http.ResponseWriter, r *http.Request) {
 	id := uuid.New().String()
 	newGame := game.NewGame()
@@ -47,6 +48,7 @@ func CreateGameHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
+// ------- Get Game ------------------------------------------------------
 func GetGameHandler(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
@@ -72,6 +74,7 @@ func GetGameHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
+// ------- Make Move ------------------------------------------------------
 func MakeMoveHandler(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
@@ -143,6 +146,7 @@ func MakeMoveHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
+// ------- Join Game ------------------------------------------------------
 func JoinGameHandler(w http.ResponseWriter, r *http.Request) {
 	gameID := chi.URLParam(r, "id")
 	name := r.URL.Query().Get("name")
@@ -183,4 +187,40 @@ func JoinGameHandler(w http.ResponseWriter, r *http.Request) {
 		"status":   currentGame.Status,
 		"yourName": name,
 	})
+}
+
+// ------- Restart Game ------------------------------------------------------
+func RestartGameHandler(w http.ResponseWriter, r *http.Request) {
+	gameID := chi.URLParam(r, "id")
+
+	gameMux.Lock()
+	defer gameMux.Unlock()
+
+	gameInstance, ok := games[gameID]
+	if !ok {
+		http.Error(w, "game not found", http.StatusBadRequest)
+		return
+	}
+
+	gameInstance.Board = [3][3]string{{" ", " ", " "}, {" ", " ", " "}, {" ", " ", " "}}
+	gameInstance.CurrentPlayer = "X"
+	gameInstance.Winner = ""
+	gameInstance.Won = false
+	gameInstance.Moves = 0
+	gameInstance.Coords = [2]int{0, 0}
+	gameInstance.Status = "ready"
+	gameInstance.LastUpdated = time.Now()
+
+	response := CreateGameResponse{
+		ID:            gameID,
+		Board:         gameInstance.Board,
+		CurrentPlayer: gameInstance.CurrentPlayer,
+		Status:        gameInstance.Status,
+		Winner:        gameInstance.Winner,
+		LastUpdated:   gameInstance.LastUpdated,
+		Players:       gameInstance.Players,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
 }

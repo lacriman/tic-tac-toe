@@ -21,8 +21,8 @@ async function init() {
 
   while (!sessionData) {
     await showUsernamePopup();
-     sessionRes = await fetch("/api/session");
-     sessionData = sessionRes.ok ? await sessionRes.json() : null;
+    sessionRes = await fetch("/api/session");
+    sessionData = sessionRes.ok ? await sessionRes.json() : null;
   }
 
   const urlParams = new URLSearchParams(window.location.search); // returns "?gameId=abc123" https://localhost:3000/?gameId=abc123
@@ -39,7 +39,7 @@ async function init() {
   }
 }
 
- init();
+init();
 
 /* --------------- Popup ------------------------- */
 async function showUsernamePopup() {
@@ -275,9 +275,17 @@ function endGame(winner) {
 }
 
 restartButton.addEventListener("click", async () => {
-  const res = await fetch("/api/game", { method: "POST" });
-  const data = await res.json();
-  currentGameId = data.id;
-  renderBoard(data.board);
-  winningMessageElement.classList.remove("show");
+  try {
+    const res = await fetch( `/api/game/${currentGameId}/restart`, { method: "POST" });
+    if (!res.ok) {
+      gameInfo.textContent = "Restart failed";
+      throw new Error("Restart failed");
+    } 
+    const data = await res.json();
+    renderBoard(data.board);
+    winningMessageElement.classList.remove("show");
+    gameInfo.textContent = "Game restarted"
+  } catch (err) {
+    gameInfo.textContent = `Restart failed: ${err.message}`;
+  }
 });
