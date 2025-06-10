@@ -208,8 +208,9 @@ func RestartGameHandler(w http.ResponseWriter, r *http.Request) {
 	gameInstance.Won = false
 	gameInstance.Moves = 0
 	gameInstance.Coords = [2]int{0, 0}
-	gameInstance.Status = "ready"
+	gameInstance.Status = "restarted"
 	gameInstance.LastUpdated = time.Now()
+	gameInstance.Players[0].Symbol, gameInstance.Players[1].Symbol = gameInstance.Players[1].Symbol, gameInstance.Players[0].Symbol
 
 	response := CreateGameResponse{
 		ID:            gameID,

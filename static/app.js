@@ -188,6 +188,10 @@ function startPolling() {
       if (data.status === "won" || data.status === "draw") {
         endGame(data.winner);
       }
+      if (data.status === "restarted") {
+        winningMessageElement.classList.remove("show");
+        gameInfo.textContent = "Game has been restarted!";
+      }
     } catch (err) {
       console.error("Polling error: ", err);
     }
@@ -276,15 +280,17 @@ function endGame(winner) {
 
 restartButton.addEventListener("click", async () => {
   try {
-    const res = await fetch( `/api/game/${currentGameId}/restart`, { method: "POST" });
+    const res = await fetch(`/api/game/${currentGameId}/restart`, {
+      method: "POST",
+    });
     if (!res.ok) {
       gameInfo.textContent = "Restart failed";
       throw new Error("Restart failed");
-    } 
+    }
     const data = await res.json();
     renderBoard(data.board);
     winningMessageElement.classList.remove("show");
-    gameInfo.textContent = "Game restarted"
+    gameInfo.textContent = "Game restarted";
   } catch (err) {
     gameInfo.textContent = `Restart failed: ${err.message}`;
   }
